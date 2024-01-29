@@ -3,6 +3,10 @@ import router from '@/router';
 import SharedView from './SharedView.vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
+import { useAxios } from '@vueuse/integrations/useAxios'
+import { postMethod, createRoomUrl } from '@/api/requests'
+
+const { data, isLoading, error, execute } = useAxios()
 
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
@@ -13,8 +17,12 @@ const { errors, handleSubmit, defineField } = useForm({
 const [username] = defineField('username');
 const [roomName] = defineField('roomName');
 
-const onSubmit = handleSubmit(values => {
-
+const onSubmit = handleSubmit(async () => {
+    await execute(createRoomUrl,
+        {
+            method: postMethod,
+            data: { userName: username.value, roomName: roomName.value }
+        })
 })
 
 const redirect = (name: string) => {
@@ -47,6 +55,15 @@ const redirect = (name: string) => {
                     </div>
                 </div>
             </form>
+            <div v-if="isLoading">
+                LOADING
+            </div>
+            <div v-else-if="error">
+                <p class="text-danger"> Error creating a room</p>
+            </div>
+            <div v-else-if="data">
+                <p class="text-primary">{{ data }}</p>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex gap-1 flex-column justify-content-start mt-3">
