@@ -5,7 +5,9 @@ const { execute } = useAxios()
 router.beforeEach(async (to, from) => {
   if (to.meta.requiresAuth) {
     try {
-      await execute(isAuthUrl, { method: getMethod, withCredentials: true })
+      const { data } = await execute(isAuthUrl, { method: getMethod, withCredentials: true })
+      if (data.value) return true
+      else return false
     } catch (err) {
       return { name: 'join' }
     }
