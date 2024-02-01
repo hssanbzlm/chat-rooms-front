@@ -1,5 +1,8 @@
 <template>
     <li :class="[{ 'd-flex flex-column align-items-end': !props.isMyMessage }, 'list-group-item', 'p-3']">
+        <div class="fw-bold fst-italic" :class="[{ 'me-2': !props.isMyMessage }]">
+            {{ props.fullName }}
+        </div>
         <div class="message-data mb-2">
             <span class="message-data-time">{{ props.time }}</span>
             <img v-if="!props.isMyMessage" :src="props.img" alt="avatar" class="rounded">
@@ -14,6 +17,7 @@ type propsShape = {
     img?: string,
     message: string
     isMyMessage: boolean
+    fullName: string
 }
 const props = defineProps<propsShape>()
 </script>
