@@ -3,6 +3,8 @@ import ChatInput from '@/components/ChatInput.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
 import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
+import { useMessages } from '@/composables/useMessages'
+const { messages, isLoading, error } = useMessages()
 
 </script>
 
@@ -25,19 +27,15 @@ import ChatHeader from '@/components/ChatHeader.vue'
           </div>
           <div class="chat">
             <ChatHeader :chatName="'First chat'" :created="'10/10/2024'" />
-            <div class="chat-history p-3">
+            <div v-if="isLoading"> LOADING</div>
+            <div v-else-if="error">
+              ERROR
+            </div>
+            <div v-else class="chat-history p-3">
               <ul>
-                <ChatMessage :isMyMessage="false" :time="'10:10 AM, Today'"
-                  :img="'https://bootdey.com/img/Content/avatar/avatar7.png'"
-                  :message="'Hi Aiden, how are you? How is the project coming along?'" />
-                <ChatMessage :isMyMessage="true" :time="'10:12 AM, Today'" :message="'Are we meeting today?'" />
-                <ChatMessage :isMyMessage="false" :time="'10:10 AM, Today'"
-                  :img="'https://bootdey.com/img/Content/avatar/avatar7.png'"
-                  :message="'Hi Aiden, how are you? How is the project coming along?'" />
-                <ChatMessage :isMyMessage="true" :time="'10:12 AM, Today'" :message="'Are we meeting today?'" />
-                <ChatMessage :isMyMessage="true" :time="'10:12 AM, Today'" :message="'Are we meeting today?'" />
-                <ChatMessage :isMyMessage="true" :time="'10:12 AM, Today'" :message="'Are we meeting today?'" />
-
+                <ChatMessage v-for="message in messages" :key="message._id" :isMyMessage="message.isMyMessage"
+                  :time="message.date.toString()" :img="'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                  :message="message.content" />
               </ul>
             </div>
             <div class="chat-message mb-1 p-1">
