@@ -4,7 +4,18 @@ import ChatMessage from '@/components/ChatMessage.vue';
 import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
 import { useMessages } from '@/composables/useMessages'
+import socket from '@/listeners/socket'
 const { messages, isLoading, error } = useMessages()
+
+socket.on("new-message", (data) => {
+  messages.value.push(data)
+});
+socket.on("my-new-message", (data) => {
+  messages.value.push(data)
+});
+const sendMessage = (message: string) => {
+  socket.emit('send-message', message)
+}
 
 </script>
 
@@ -35,11 +46,11 @@ const { messages, isLoading, error } = useMessages()
               <ul>
                 <ChatMessage v-for="message in messages" :key="message._id" :isMyMessage="message.isMyMessage"
                   :time="message.date.toString()" :img="'https://bootdey.com/img/Content/avatar/avatar7.png'"
-                  :message="message.content" />
+                  :message="message.content" :fullName="message.isMyMessage ? 'You' : message.sender.fullName" />
               </ul>
             </div>
             <div class="chat-message mb-1 p-1">
-              <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." />
+              <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage" />
             </div>
           </div>
         </div>
