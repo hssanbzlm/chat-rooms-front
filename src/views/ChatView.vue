@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import ChatInput from '@/components/ChatInput.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
 import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
 import { useMessages } from '@/composables/useMessages'
 import socket from '@/listeners/socket'
+import type { User } from '@/interfaces/user';
 const { messages, isLoading, error } = useMessages()
+const connectedUsers = ref<User[]>([])
 
 socket.on("new-message", (data) => {
   messages.value.push(data)
@@ -13,6 +16,12 @@ socket.on("new-message", (data) => {
 socket.on("my-new-message", (data) => {
   messages.value.push(data)
 });
+socket.on('user-join', (data) => {
+  connectedUsers.value = data
+})
+socket.on('user-leave', (data) => {
+  connectedUsers.value = data
+})
 const sendMessage = (message: string) => {
   socket.emit('send-message', message)
 }
@@ -27,12 +36,8 @@ const sendMessage = (message: string) => {
           <div class="people-list mt-2 p-3">
             <ChatInput size="xl" icon="magnifying-glass" placeholder="Search ...." />
             <ul class="chat-list mt-4 mb-0">
-              <ChatProfile :img="'https://bootdey.com/img/Content/avatar/avatar1.png'" :name="'Vincent Porter'"
-                :status="'left 7 mins ago'" />
-              <ChatProfile :img="'https://bootdey.com/img/Content/avatar/avatar2.png'" :name="'Aiden Chavaz'"
-                :status="'online'" />
-              <ChatProfile :img="'https://bootdey.com/img/Content/avatar/avatar3.png'" :name="'Mike Thomas'"
-                :status="'online'" />
+              <ChatProfile v-for="user in connectedUsers" :key="user._id"
+                :img="'https://bootdey.com/img/Content/avatar/avatar1.png'" :name="user.fullName" :status="'connected'" />
 
             </ul>
           </div>
