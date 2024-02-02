@@ -1,29 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import ChatInput from '@/components/ChatInput.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
 import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
-import { useMessages } from '@/composables/useMessages'
-import socket from '@/listeners/socket'
-import type { User } from '@/interfaces/user';
-const { messages, isLoading, error } = useMessages()
-const connectedUsers = ref<User[]>([])
+import { useMessage } from '@/composables/Message'
+import { useConnectedUsers } from '@/composables/ConnectedUsers';
 
-socket.on("new-message", (data) => {
-  messages.value.push(data)
-});
-socket.on("my-new-message", (data) => {
-  messages.value.push(data)
-});
-socket.on('user-join', (data) => {
-  connectedUsers.value = data
-})
-socket.on('user-leave', (data) => {
-  connectedUsers.value = data
-})
+const { isLoading, error, messages, bindMessagesEvents, messageEmitter } = useMessage()
+const { connectedUsers, binConnectedUsersEvent } = useConnectedUsers()
+
+bindMessagesEvents()
+binConnectedUsersEvent()
+
 const sendMessage = (message: string) => {
-  socket.emit('send-message', message)
+  messageEmitter(message)
 }
 
 </script>
