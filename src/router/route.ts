@@ -6,6 +6,11 @@ export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      name: 'join',
+      component: JoinRoomView
+    },
+    {
       path: '/account',
       name: 'account',
       component: CreateAccountView
@@ -14,11 +19,6 @@ export const router = createRouter({
       path: '/room',
       name: 'room',
       component: CreateRoomView
-    },
-    {
-      path: '/join',
-      name: 'join',
-      component: JoinRoomView
     },
     {
       path: '/chat',
