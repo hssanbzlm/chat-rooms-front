@@ -4,5 +4,6 @@ export const getMethod = 'GET'
 export const createAccountUrl = `${baseUrl}/api/user/add`
 export const createRoomUrl = `${baseUrl}/api/chat-room/create`
 export const joinRoomUrl = `${baseUrl}/api/auth/join`
+export const leaveRoomUrl = `${baseUrl}/api/auth/leave`
 export const isAuthUrl = `${baseUrl}/api/auth/is-auth`
 export const getMessagesUrl = `${baseUrl}/api/messages/get-messages`
