@@ -2,8 +2,9 @@ import { useAxios } from '@vueuse/integrations/useAxios'
 import { ref } from 'vue'
 import type { User } from '../interfaces/user'
 import { joinRoomUrl, postMethod } from '@/api/requests'
+import { defineStore } from 'pinia'
 
-export function useUser() {
+export const useUser = defineStore('user', () => {
   const { isLoading, error, execute } = useAxios()
   const user = ref<User>()
 
@@ -17,10 +18,14 @@ export function useUser() {
       user.value = data.value
     }
   }
+  const setUser = (payload: User) => {
+    user.value = payload
+  }
   return {
     joinRoom,
+    setUser,
     isLoading,
     error,
     user
   }
-}
+})
