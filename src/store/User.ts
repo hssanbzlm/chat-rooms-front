@@ -18,7 +18,7 @@ export const useUser = defineStore('user', () => {
       user.value = data.value
     }
   }
-  const setUser = (payload: User) => {
+  const setUser = (payload: User | undefined) => {
     user.value = payload
   }
   return {
