@@ -3,10 +3,9 @@ import router from '@/router';
 import SharedView from './SharedView.vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
-import { useAxios } from '@vueuse/integrations/useAxios';
-import { joinRoomUrl, postMethod } from '@/api/requests';
+import { useUser } from '@/composables/User';
 
-const { isLoading, error, data, execute } = useAxios()
+const { joinRoom, isLoading, error, user } = useUser()
 
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
@@ -18,14 +17,8 @@ const [username] = defineField('username');
 const [roomCode] = defineField('roomCode');
 
 const onSubmit = handleSubmit(async () => {
-    await execute(joinRoomUrl,
-        {
-            withCredentials: true,
-            method: postMethod,
-            data: { userName: username.value, roomCode: roomCode.value }
-        })
-
-    if (data)
+    await joinRoom({ username: username.value, roomCode: roomCode.value })
+    if (user.value)
         router.push({ name: 'chat' })
 })
 
