@@ -32,6 +32,7 @@ const onLeave = async () => {
     const { data } = await execute(leaveRoomUrl, { withCredentials: true, method: postMethod })
     if (data) {
         socket.disconnect()
+        userStore.setUser(undefined)
         router.push({ name: 'join' })
     }
 }

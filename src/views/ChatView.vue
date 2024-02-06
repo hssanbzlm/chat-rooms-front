@@ -9,6 +9,8 @@ const userStore = useUser()
 </script>
 
 <template>
-  <ChatSetting :isAdmin="userStore.user!.isAdmin" />
-  <ChatMain />
+  <div v-if="userStore.user">
+    <ChatSetting :isAdmin="userStore.user.isAdmin" />
+    <ChatMain />
+  </div>
 </template>
