@@ -3,10 +3,9 @@ import router from '@/router';
 import SharedView from './SharedView.vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
-import { useUser } from '@/composables/User';
+import { useUser } from '@/store/User';
 
-const { joinRoom, isLoading, error, user } = useUser()
-
+const userStore = useUser()
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
         username: yup.string().required('Username is a required field').min(5),
@@ -17,8 +16,8 @@ const [username] = defineField('username');
 const [roomCode] = defineField('roomCode');
 
 const onSubmit = handleSubmit(async () => {
-    await joinRoom({ username: username.value, roomCode: roomCode.value })
-    if (user.value)
+    await userStore.joinRoom({ username: username.value, roomCode: roomCode.value })
+    if (userStore.user)
         router.push({ name: 'chat' })
 })
 
@@ -33,29 +32,31 @@ const redirect = (name: string) => {
                 <div class="row gy-3 overflow-hidden">
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input class="form-control" placeholder="Username" v-model="username" :disabled="isLoading">
+                            <input class="form-control" placeholder="Username" v-model="username"
+                                :disabled="userStore.isLoading">
                             <p v-if="errors.username" class="text-warning">{{ errors.username }}</p>
                             <label for="Username" class="form-label">Username</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input class="form-control" placeholder="room" v-model="roomCode" :disabled="isLoading">
+                            <input class="form-control" placeholder="room" v-model="roomCode"
+                                :disabled="userStore.isLoading">
                             <p v-if="errors.roomCode" class="text-warning">{{ errors.roomCode }}</p>
                             <label for="room-id" class="form-label">Room</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="d-grid">
-                            <button class="btn btn-dark btn-lg" type="submit" :disabled="isLoading">Join</button>
+                            <button class="btn btn-dark btn-lg" type="submit" :disabled="userStore.isLoading">Join</button>
                         </div>
                     </div>
                 </div>
             </form>
-            <div v-if="isLoading">
+            <div v-if="userStore.isLoading">
                 LOADING
             </div>
-            <div v-else-if="error">
+            <div v-else-if="userStore.error">
                 <p class="text-danger"> Error joining a room</p>
             </div>
             <div class="row">
