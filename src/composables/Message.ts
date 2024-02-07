@@ -12,9 +12,6 @@ export function useMessage() {
     socket.on('new-message', (data) => {
       messages.value.push(data)
     })
-    socket.on('my-new-message', (data) => {
-      messages.value.push(data)
-    })
   }
   const messageEmitter = (message: string) => {
     socket.emit('send-message', message)

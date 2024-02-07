@@ -5,5 +5,4 @@ export interface message {
   date: Date
   sender: User
   receiver: string
-  isMyMessage: boolean
 }
