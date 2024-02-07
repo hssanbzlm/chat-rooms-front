@@ -1,25 +1,32 @@
 <template>
-    <li :class="[{ 'd-flex flex-column align-items-end': !props.isMyMessage }, 'list-group-item', 'p-3']">
-        <div class="fw-bold fst-italic" :class="[{ 'me-2': !props.isMyMessage }]">
-            {{ props.fullName }}
+    <li :class="[{ 'd-flex flex-column align-items-end': !isMyMessage }, 'list-group-item', 'p-3']">
+        <div class="fw-bold fst-italic" :class="[{ 'me-2': !isMyMessage }]">
+            {{ isMyMessage ? 'You' : props.msg.sender.fullName }}
         </div>
         <div class="message-data mb-2">
-            <span class="message-data-time">{{ props.time }}</span>
-            <img v-if="!props.isMyMessage" :src="props.img" alt="avatar" class="rounded">
+            <span class="message-data-time">{{ props.msg.date }}</span>
+            <img v-if="!isMyMessage" :src="'https://bootdey.com/img/Content/avatar/avatar7.png'" alt="avatar"
+                class="rounded">
         </div>
-        <div :class="['message p-3 rounded', props.isMyMessage ? 'my-message' : 'other-message']"> {{ props.message }}
+        <div :class="['message p-3 rounded', isMyMessage ? 'my-message' : 'other-message']"> {{ props.msg.content }}
         </div>
     </li>
 </template>
 <script setup lang="ts">
-type propsShape = {
-    time: string,
-    img?: string,
-    message: string
-    isMyMessage: boolean
-    fullName: string
-}
-const props = defineProps<propsShape>()
+import type { message } from '@/interfaces/message';
+import { computed } from "vue"
+import { useUser } from '@/store/User';
+
+const props = defineProps<{ msg: message }>()
+const userStore = useUser()
+
+const isMyMessage = computed(() => {
+    return userStore.user?.userName == props.msg.sender.userName
+
+})
+
+
+
 </script>
 
 <style scoped>
