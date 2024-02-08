@@ -6,7 +6,7 @@ export function useFetchMessages(list: Ref<number>, msgToSkip: Ref<number>) {
   const { isLoading, error, data, execute } = useAxios()
 
   const loadMessages = async () => {
-    await execute(`${getMessagesUrl}/${toValue(list)}`, {
+    await execute(`${getMessagesUrl}/${toValue(list)}?skip=${toValue(msgToSkip)}`, {
       method: getMethod,
       withCredentials: true
     })
