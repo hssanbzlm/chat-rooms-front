@@ -1,18 +1,17 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
 import { getMethod, getMessagesUrl } from '@/api/requests'
-import { ref, watch } from 'vue'
+import { toValue, type Ref, watch } from 'vue'
 
-export function useMessagesRequest() {
-  const list = ref(1)
+export function useFetchMessages(list: Ref<number>, msgToSkip: Ref<number>) {
   const { isLoading, error, data, execute } = useAxios()
-  const nextMessageList = () => (list.value += list.value + 1)
 
   const loadMessages = async () => {
-    await execute(`${getMessagesUrl}/${list.value}`, {
+    await execute(`${getMessagesUrl}/${toValue(list)}`, {
       method: getMethod,
       withCredentials: true
     })
   }
+
   watch(
     list,
     () => {
@@ -22,7 +21,7 @@ export function useMessagesRequest() {
   )
 
   return {
-    nextMessageList,
+    loadMessages,
     data,
     isLoading,
     error

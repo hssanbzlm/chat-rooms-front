@@ -1,16 +1,19 @@
 import type { message } from '@/interfaces/message'
 import { ref, watch } from 'vue'
-import { useMessagesRequest } from '@/composables/MessagesRequest'
+import { useFetchMessages } from '@/composables/FetchMessages'
 import socket from '@/listeners/socket'
 
 export function useMessage() {
-  const { data, isLoading, error, nextMessageList } = useMessagesRequest()
+  const list = ref(1)
+  const msgToSkip = ref(0)
+  const { data, isLoading, error } = useFetchMessages(list, msgToSkip)
 
   const messages = ref<message[]>([])
 
   const bindMessagesEvents = () => {
     socket.on('new-message', (data) => {
       messages.value.push(data)
+      msgToSkip.value += 1
     })
   }
   const messageEmitter = (message: string) => {
@@ -18,14 +21,19 @@ export function useMessage() {
   }
   watch(data, () => {
     messages.value.push(...data.value.messages)
+    msgToSkip.value = 0
   })
+
+  const loadNextMessages = () => {
+    list.value += 1
+  }
 
   return {
     isLoading,
     error,
     messages,
-    nextMessageList,
     bindMessagesEvents,
-    messageEmitter
+    messageEmitter,
+    loadNextMessages
   }
 }
