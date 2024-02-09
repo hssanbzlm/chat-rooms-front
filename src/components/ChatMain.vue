@@ -7,18 +7,21 @@ import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/composables/Message'
 import { useConnectedUsers } from '@/composables/ConnectedUsers';
+import { useTypingUsers } from "@/composables/TypingUsers"
 import socket from '@/listeners/socket'
 import { onMounted } from 'vue';
 import { useInfiniteScroll } from '@vueuse/core'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const { isLoading, error, messages, isLast, bindMessagesEvents, messageEmitter, loadNextMessages } = useMessage()
 const { connectedUsers, binConnectedUsersEvent } = useConnectedUsers()
+const { typingUserEmitter, notTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
 const el = ref<HTMLElement>()
 onMounted(() => {
     socket.connect()
     bindMessagesEvents()
     binConnectedUsersEvent()
+    bindTypingUsers()
 })
 
 useInfiniteScroll(el, () => {
@@ -28,6 +31,16 @@ useInfiniteScroll(el, () => {
 const sendMessage = (message: string) => {
     messageEmitter(message)
 }
+const isTyping = () => {
+    typingUserEmitter()
+}
+const isNotTyping = () => {
+    notTypingUserEmitter()
+}
+
+const typing = computed(() => {
+    return typingUsers.value.length > 0 ? typingUsers.value.join(',') + ' typing' : ''
+})
 
 </script>
 
@@ -56,7 +69,9 @@ const sendMessage = (message: string) => {
                     </ul>
                 </div>
                 <div v-if="messages" class="mb-1 p-1">
-                    <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage" />
+                    <small class="text-muted">{{ typing }}</small>
+                    <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage"
+                        @typing="isTyping" @not-typing="isNotTyping" />
                 </div>
             </div>
         </div>
