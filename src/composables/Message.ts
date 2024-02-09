@@ -6,6 +6,7 @@ import socket from '@/listeners/socket'
 export function useMessage() {
   const list = ref(1)
   const msgToSkip = ref(0)
+  const isLast = ref(true)
   const { data, isLoading, error } = useFetchMessages(list, msgToSkip)
 
   const messages = ref<message[]>([])
@@ -20,8 +21,8 @@ export function useMessage() {
     socket.emit('send-message', message)
   }
   watch(data, () => {
-    messages.value.push(...data.value.messages)
-    msgToSkip.value = 0
+    messages.value.unshift(...data.value.messages)
+    isLast.value = data.value.lastList
   })
 
   const loadNextMessages = () => {
@@ -32,6 +33,7 @@ export function useMessage() {
     isLoading,
     error,
     messages,
+    isLast,
     bindMessagesEvents,
     messageEmitter,
     loadNextMessages
