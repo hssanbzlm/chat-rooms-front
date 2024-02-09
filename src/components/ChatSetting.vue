@@ -40,6 +40,7 @@ const onLeave = async () => {
 const onDestroy = async () => {
     const { data } = await execute(destroyRoomUrl, { withCredentials: true, method: deleteMethod })
     if (data) {
+        socket.disconnect()
         userStore.setUser(undefined)
         router.push({ name: 'join' })
     }
