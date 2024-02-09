@@ -3,19 +3,27 @@ import ChatInput from '@/components/ChatInput.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
 import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
+import ChatSpinner from "@/components/ChatSpinner.vue"
+import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/composables/Message'
 import { useConnectedUsers } from '@/composables/ConnectedUsers';
 import socket from '@/listeners/socket'
 import { onMounted } from 'vue';
+import { useInfiniteScroll } from '@vueuse/core'
+import { ref } from 'vue'
 
-const { isLoading, error, messages, bindMessagesEvents, messageEmitter } = useMessage()
+const { isLoading, error, messages, isLast, bindMessagesEvents, messageEmitter, loadNextMessages } = useMessage()
 const { connectedUsers, binConnectedUsersEvent } = useConnectedUsers()
-
+const el = ref<HTMLElement>()
 onMounted(() => {
     socket.connect()
     bindMessagesEvents()
     binConnectedUsersEvent()
 })
+
+useInfiniteScroll(el, () => {
+    loadNextMessages()
+}, { distance: 50, direction: 'top', interval: 2000, canLoadMore: () => !isLast.value })
 
 const sendMessage = (message: string) => {
     messageEmitter(message)
@@ -36,16 +44,18 @@ const sendMessage = (message: string) => {
             </div>
             <div class="chat w-100">
                 <ChatHeader :chatName="'First chat'" :created="'10/10/2024'" />
-                <div v-if="isLoading"> LOADING</div>
-                <div v-else-if="error">
-                    ERROR
+                <div v-if="isLoading" class="position-absolute start-50 mt-1">
+                    <ChatSpinner />
                 </div>
-                <div v-else class="chat-history overflow-auto p-3">
+                <div v-if="error">
+                    <ChatAlert msg="Error loading messages" type="alert-danger" />
+                </div>
+                <div v-if="messages" class="chat-history overflow-auto d-flex flex-column-reverse p-3" ref="el">
                     <ul>
                         <ChatMessage v-for="message in messages" :key="message._id" :msg="message" />
                     </ul>
                 </div>
-                <div class="mb-1 p-1">
+                <div v-if="messages" class="mb-1 p-1">
                     <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage" />
                 </div>
             </div>
