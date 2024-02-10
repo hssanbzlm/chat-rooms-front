@@ -5,16 +5,20 @@
                 Settings
             </button>
             <ul class="dropdown-menu">
-                <li role="button"><a class="dropdown-item">Profile</a></li>
+                <li role="button" class="dropdown-item">
+                    Profile
+                </li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" @click="onLeave" role="button">Leave</a></li>
-                <li v-if="props.isAdmin"><a class="dropdown-item" @click="onDestroy" role="button">Destroy</a></li>
-
-
+                <li class="dropdown-item" @click="onLeave" role="button">Leave</li>
+                <li v-if="props.isAdmin" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#appModal"
+                    role="button">
+                    Destroy
+                </li>
             </ul>
         </div>
+        <AppModal title="Destroy room" body="Are you sure about destroying this room?" @confirm="onDestroy" />
     </div>
 </template>
 <script setup lang="ts">
@@ -23,6 +27,7 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { useUser } from "@/store/User"
 import { deleteMethod, destroyRoomUrl, leaveRoomUrl, postMethod } from "@/api/requests"
 import socket from '@/listeners/socket';
+import AppModal from './AppModal.vue';
 
 const props = defineProps<{ isAdmin: boolean }>()
 const { execute } = useAxios()
