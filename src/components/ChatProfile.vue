@@ -1,18 +1,21 @@
 <template>
-    <li class="list-group-item p-2 float-start">
-        <img :src="props.img" alt="avatar" class="rounded float-start w-25">
+    <li v-for="user in connectedUsers" :key="user._id" class="list-group-item p-2 float-start">
+        <img :src="'https://bootdey.com/img/Content/avatar/avatar1.png'" alt="avatar" class="rounded float-start w-25">
         <div class="about float-start ps-2">
-            <div>{{ props.name }}</div>
-            <div class="text-secondary"> {{ props.status }} </div>
+            <div>{{ user.fullName }}</div>
+            <div class="text-secondary"> connected </div>
         </div>
     </li>
 </template>
 <script setup lang="ts">
-type propsShape = {
-    img: string,
-    name: string,
-    status: string
-}
-const props = defineProps<propsShape>()
+import { onMounted } from 'vue';
+import { useConnectedUsers } from '@/composables/ConnectedUsers';
+
+const { connectedUsers, bindConnectedUsersEvent } = useConnectedUsers()
+
+onMounted(() => {
+    bindConnectedUsersEvent()
+})
+
 </script>
 <style scoped></style>

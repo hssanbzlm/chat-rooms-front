@@ -2,8 +2,9 @@ import type { message } from '@/interfaces/message'
 import { ref, watch } from 'vue'
 import { useFetchMessages } from '@/composables/FetchMessages'
 import socket from '@/listeners/socket'
+import { defineStore } from 'pinia'
 
-export function useMessage() {
+export const useMessage = defineStore('message', () => {
   const list = ref(1)
   const msgToSkip = ref(0)
   const isLast = ref(true)
@@ -38,4 +39,4 @@ export function useMessage() {
     messageEmitter,
     loadNextMessages
   }
-}
+})
