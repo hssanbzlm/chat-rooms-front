@@ -11,7 +11,7 @@ import socket from '@/listeners/socket'
 import { computed, onMounted } from 'vue'
 
 const messageStore = useMessage()
-const { typingUserEmitter, notTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
+const { typingUserEmitter, finishTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
 onMounted(() => {
     socket.connect()
     bindTypingUsers()
@@ -24,7 +24,7 @@ const isTyping = () => {
     typingUserEmitter()
 }
 const isNotTyping = () => {
-    notTypingUserEmitter()
+    finishTypingUserEmitter()
 }
 
 const typing = computed(() => {

@@ -5,10 +5,10 @@ export function useConnectedUsers() {
   const connectedUsers = ref<User[]>([])
 
   const bindConnectedUsersEvent = () => {
-    socket.on('user-join', (data) => {
+    socket.on('user:join', (data) => {
       connectedUsers.value = data
     })
-    socket.on('user-leave', (data) => {
+    socket.on('user:leave', (data) => {
       connectedUsers.value = data
     })
   }

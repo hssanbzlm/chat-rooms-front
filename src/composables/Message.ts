@@ -13,13 +13,13 @@ export const useMessage = defineStore('message', () => {
   const messages = ref<message[]>([])
 
   const bindMessagesEvents = () => {
-    socket.on('new-message', (data) => {
+    socket.on('user:message', (data) => {
       messages.value.push(data)
       msgToSkip.value += 1
     })
   }
   const messageEmitter = (message: string) => {
-    socket.emit('send-message', message)
+    socket.emit('user:message', message)
   }
   watch(data, () => {
     messages.value.unshift(...data.value.messages)
