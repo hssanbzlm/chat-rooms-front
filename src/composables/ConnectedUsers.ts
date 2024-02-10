@@ -4,7 +4,7 @@ import socket from '@/listeners/socket'
 export function useConnectedUsers() {
   const connectedUsers = ref<User[]>([])
 
-  const binConnectedUsersEvent = () => {
+  const bindConnectedUsersEvent = () => {
     socket.on('user-join', (data) => {
       connectedUsers.value = data
     })
@@ -13,5 +13,5 @@ export function useConnectedUsers() {
     })
   }
 
-  return { connectedUsers, binConnectedUsersEvent }
+  return { connectedUsers, bindConnectedUsersEvent }
 }
