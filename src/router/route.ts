@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import JoinRoomView from '@/views/JoinRoomView.vue'
 import CreateRoomView from '@/views/CreateRoomView.vue'
+import ChatMain from '@/components/ChatMain.vue'
+import ProfileView from '@/views/ProfileView.vue'
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,7 +28,11 @@ export const router = createRouter({
       component: () => import('../views/ChatView.vue'),
       meta: {
         requiresAuth: true
-      }
+      },
+      children: [
+        { path: '', name: 'chat', component: ChatMain },
+        { path: 'profile', name: 'profile', component: ProfileView }
+      ]
     }
   ]
 })
