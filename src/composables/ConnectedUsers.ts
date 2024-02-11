@@ -1,7 +1,8 @@
 import { ref } from 'vue'
 import type { User } from '@/interfaces/user'
 import socket from '@/listeners/socket'
-export function useConnectedUsers() {
+import { defineStore } from 'pinia'
+export const useConnectedUsers = defineStore('connectedUsers', () => {
   const connectedUsers = ref<User[]>([])
 
   const bindConnectedUsersEvent = () => {
@@ -12,6 +13,5 @@ export function useConnectedUsers() {
       connectedUsers.value = data
     })
   }
-
   return { connectedUsers, bindConnectedUsersEvent }
-}
+})

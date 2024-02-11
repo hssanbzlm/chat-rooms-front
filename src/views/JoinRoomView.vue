@@ -4,6 +4,7 @@ import SharedView from './SharedView.vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
 import { useUser } from '@/store/User';
+import socket from "@/listeners/socket"
 
 const userStore = useUser()
 const { errors, handleSubmit, defineField } = useForm({
@@ -17,8 +18,10 @@ const [roomCode] = defineField('roomCode');
 
 const onSubmit = handleSubmit(async () => {
     await userStore.joinRoom({ username: username.value, roomCode: roomCode.value })
-    if (userStore.user)
-        router.push({ path: 'chat' })
+    if (userStore.user) {
+        await router.push({ path: 'chat' })
+        socket.connect()
+    }
 })
 
 const redirect = (name: string) => {

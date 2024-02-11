@@ -30,8 +30,8 @@ export const router = createRouter({
         requiresAuth: true
       },
       children: [
-        { path: '', name: 'chat', component: ChatMain },
-        { path: 'profile', name: 'profile', component: ProfileView }
+        { path: '', name: 'chat-main', component: () => ChatMain },
+        { path: 'profile', name: 'profile', component: () => ProfileView }
       ]
     }
   ]

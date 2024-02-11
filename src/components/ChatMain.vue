@@ -7,13 +7,11 @@ import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/composables/Message'
 import { useTypingUsers } from "@/composables/TypingUsers"
-import socket from '@/listeners/socket'
 import { computed, onMounted } from 'vue'
-
-const messageStore = useMessage()
 const { typingUserEmitter, finishTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
+const messageStore = useMessage()
+
 onMounted(() => {
-    socket.connect()
     bindTypingUsers()
 })
 
