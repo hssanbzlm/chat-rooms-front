@@ -22,7 +22,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     if (to.redirectedFrom && to.redirectedFrom.name === 'chat') next()
     else if (to.redirectedFrom === undefined && from.name === undefined) {
-      next({ name: 'chat' })
+      next({ path: 'chat' })
     } else next()
   }
 })
