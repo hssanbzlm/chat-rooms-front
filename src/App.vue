@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useConnectedUsers } from '@/composables/ConnectedUsers';
+import { useConnectedUsers } from '@/store/ConnectedUsers';
 const { bindConnectedUsersEvent } = useConnectedUsers()
 bindConnectedUsersEvent()
 </script>
@@ -9,3 +9,4 @@ bindConnectedUsersEvent()
 </template>
 
 <style scoped></style>
+@/store/ConnectedUsers

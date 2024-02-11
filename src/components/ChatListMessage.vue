@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import ChatMessage from "@/components/ChatMessage.vue"
-import { useMessage } from '@/composables/Message'
+import { useMessage } from '@/store/Message'
 import { useInfiniteScroll } from '@vueuse/core'
 
 const el = ref<HTMLElement>()
@@ -23,3 +23,4 @@ useInfiniteScroll(el, () => {
 }, { distance: 50, direction: 'top', interval: 2000, canLoadMore: () => !messageStore.isLast })
 
 </script>
+@/store/Message

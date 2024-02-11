@@ -5,7 +5,7 @@ import ChatProfile from '@/components/ChatProfile.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
 import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
-import { useMessage } from '@/composables/Message'
+import { useMessage } from '@/store/Message'
 import { useTypingUsers } from "@/composables/TypingUsers"
 import { computed, onMounted } from 'vue'
 const { typingUserEmitter, finishTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
@@ -69,3 +69,4 @@ const typing = computed(() => {
     }
 }
 </style>
+@/store/Message

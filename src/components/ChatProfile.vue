@@ -8,8 +8,8 @@
     </li>
 </template>
 <script setup lang="ts">
-import { useConnectedUsers } from '@/composables/ConnectedUsers';
+import { useConnectedUsers } from '@/store/ConnectedUsers';
 const connectedUsersStore = useConnectedUsers()
 
 </script>
-<style scoped></style>
+<style scoped></style>@/store/ConnectedUsers
