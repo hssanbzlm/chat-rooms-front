@@ -5,7 +5,7 @@
                 Settings
             </button>
             <ul class="dropdown-menu">
-                <li role="button" class="dropdown-item">
+                <li role="button" class="dropdown-item" @click="redirectToProfile">
                     Profile
                 </li>
                 <li>
@@ -49,6 +49,11 @@ const onDestroy = async () => {
         userStore.setUser(undefined)
         router.push({ name: 'join' })
     }
+}
+
+const redirectToProfile = () => {
+    router.push({ name: 'profile' })
+
 }
 
 

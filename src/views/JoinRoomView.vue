@@ -18,7 +18,7 @@ const [roomCode] = defineField('roomCode');
 const onSubmit = handleSubmit(async () => {
     await userStore.joinRoom({ username: username.value, roomCode: roomCode.value })
     if (userStore.user)
-        router.push({ name: 'chat' })
+        router.push({ path: 'chat' })
 })
 
 const redirect = (name: string) => {

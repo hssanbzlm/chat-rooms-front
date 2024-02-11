@@ -21,6 +21,9 @@ export const useUser = defineStore('user', () => {
   const setUser = (payload: User | undefined) => {
     user.value = payload
   }
+  const updateUser = (payload: User) => {
+    //todo: waiting backend api
+  }
   return {
     joinRoom,
     setUser,
