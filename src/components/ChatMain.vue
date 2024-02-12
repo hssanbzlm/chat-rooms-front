@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChatInput from '@/components/ChatInput.vue';
 import ChatListMessage from '@/components/ChatListMessage.vue';
-import ChatProfile from '@/components/ChatProfile.vue';
+import ChatConnectedList from '@/components/ChatConnectedList.vue';
 import ChatHeader from '@/components/ChatHeader.vue'
 import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
@@ -37,7 +37,7 @@ const typing = computed(() => {
             <div class="people-list p-3 d-none d-md-inline ">
                 <ChatInput size="xl" icon="magnifying-glass" placeholder="Search ...." />
                 <div class="chat-list overflow-auto mt-4 mb-0">
-                    <ChatProfile />
+                    <ChatConnectedList />
                 </div>
             </div>
             <div class="chat w-100">
