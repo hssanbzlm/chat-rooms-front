@@ -78,10 +78,6 @@ const onFullNameFocus = () => {
     display: none;
 }
 
-.fullName-content:focus&&button {
-    display: none;
-
-}
 
 .profile-avatar:hover {
     opacity: 0.2;
