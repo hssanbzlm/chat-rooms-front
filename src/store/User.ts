@@ -1,7 +1,7 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
 import { ref } from 'vue'
 import type { User } from '../interfaces/user'
-import { joinRoomUrl, postMethod } from '@/api/requests'
+import { joinRoomUrl, postMethod, putMethod, updateUserUrl } from '@/api/requests'
 import { defineStore } from 'pinia'
 
 export const useUser = defineStore('user', () => {
@@ -21,12 +21,20 @@ export const useUser = defineStore('user', () => {
   const setUser = (payload: User | undefined) => {
     user.value = payload
   }
-  const updateUser = (payload: User) => {
-    //todo: waiting backend api
+  const updateUser = async (payload: FormData) => {
+    const { data } = await execute(updateUserUrl, {
+      withCredentials: true,
+      method: putMethod,
+      data: payload
+    })
+    if (data.value && user.value) {
+      user.value = { ...user.value, fullName: data.value.fullName, avatar: data.value.avatar }
+    }
   }
   return {
     joinRoom,
     setUser,
+    updateUser,
     isLoading,
     error,
     user

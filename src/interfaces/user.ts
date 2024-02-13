@@ -3,4 +3,5 @@ export interface User {
   userName: string
   fullName: string
   isAdmin: boolean
+  avatar: string
 }
