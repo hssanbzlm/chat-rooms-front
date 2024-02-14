@@ -4,7 +4,11 @@ export function useProfileUpdate() {
   const userStore = useUser()
   const newFullName = ref<string>()
   const newAvatar = ref()
-  const previewAvatar = ref(userStore.user!.avatar)
+  const previewAvatar = ref(
+    userStore.user!.avatar
+      ? userStore.user!.avatar
+      : 'https://ui-avatars.com/api/?name=' + `${userStore.user!.fullName}`
+  )
 
   const onUpdateFullName = (fullName: string) => {
     newFullName.value = fullName

@@ -1,8 +1,4 @@
-body {
-    background-color: #639181;
-  }
-  
-  .chat-history,
+.chat-history,
 .chat-list {
     height: 68vh;
 }

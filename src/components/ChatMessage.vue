@@ -1,15 +1,16 @@
 <template>
     <li :class="[{ 'd-flex flex-column align-items-end': !isMyMessage }, 'list-group-item', 'p-3']">
-        <div class="fw-bold fst-italic" :class="[{ 'me-2': isMyMessage }]">
-            {{ isMyMessage ? 'You' : props.msg.sender.fullName }}
+        <div class="message-data">
+            <span :class="['msg-sender fw-bold', { 'me-1': !isMyMessage }]">{{ isMyMessage ? 'You' :
+                props.msg.sender.fullName
+            }}</span>
+            <img v-if="!isMyMessage" :src="myAvatar" alt="avatar" class="rounded-circle avatar">
         </div>
-        <div class="message-data mb-2">
-            <span class="message-data-time">{{ props.msg.date }}</span>
-            <img v-if="!isMyMessage" :src="'https://bootdey.com/img/Content/avatar/avatar7.png'" alt="avatar"
-                class="rounded">
+        <div class="fst-italic" :class="[{ 'me-2': isMyMessage }]">
+            <div class="message-data-time">{{ msgDate.value }}</div>
         </div>
-        <div :class="['message p-3 rounded', isMyMessage ? 'my-message' : 'other-message']">
-            {{ props.msg.content }}
+        <div :class="['message p-2 rounded', isMyMessage ? 'my-message' : 'other-message']">
+            <span class="message-content">{{ props.msg.content }}</span>
         </div>
     </li>
 </template>
@@ -17,6 +18,7 @@
 import type { message } from '@/interfaces/message';
 import { computed } from "vue"
 import { useUser } from '@/store/User'
+import { useDateFormat } from '@vueuse/core'
 
 const userStore = useUser()
 const props = defineProps<{ msg: message }>()
@@ -24,19 +26,28 @@ const props = defineProps<{ msg: message }>()
 const isMyMessage = computed(() => {
     return userStore.user?.userName === props.msg.sender.userName
 })
+
+const msgDate = computed(() => {
+    return useDateFormat(props.msg.date, 'dddd HH:mm aa MMMM-DD ')
+})
+
+const myAvatar = computed(() => {
+    return props.msg.sender.avatar ? props.msg.sender.avatar : 'https://ui-avatars.com/api/?name=' + `${props.msg.sender.fullName}`
+})
 </script>
+
 <style scoped>
 .message {
     color: #444;
     display: inline-block;
 }
 
-.message-data img {
-    width: 40px
+.msg-sender {
+    font-size: 0.6em;
 }
 
 .message-data-time {
-    color: #434651;
+    font-size: 0.6em;
 }
 
 .my-message {
@@ -45,5 +56,14 @@ const isMyMessage = computed(() => {
 
 .other-message {
     background: #e8f1f3;
+}
+
+.avatar {
+    height: 20px;
+    width: 20px;
+}
+
+.message-content {
+    font-size: 0.9em;
 }
 </style>
