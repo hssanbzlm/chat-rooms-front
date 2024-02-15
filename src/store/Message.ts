@@ -18,8 +18,8 @@ export const useMessage = defineStore('message', () => {
       msgToSkip.value += 1
     })
   }
-  const messageEmitter = (message: string) => {
-    socket.emit('user:message', message)
+  const messageEmitter = ({ content, date }: { content: string; date: Date }) => {
+    socket.emit('user:message', { content, date })
   }
   watch(data, () => {
     messages.value.unshift(...data.value.messages)

@@ -16,7 +16,8 @@ onMounted(() => {
 })
 
 const sendMessage = (message: string) => {
-    messageStore.messageEmitter(message)
+    const date = new Date()
+    messageStore.messageEmitter({ content: message, date })
 }
 const isTyping = () => {
     typingUserEmitter()
