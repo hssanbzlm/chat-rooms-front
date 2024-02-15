@@ -41,7 +41,7 @@ const typing = computed(() => {
                 </div>
             </div>
             <div class="chat w-100">
-                <ChatHeader :chatName="'First chat'" :created="'10/10/2024'" />
+                <ChatHeader />
                 <div v-if="messageStore.isLoading" class="position-absolute start-50 mt-1">
                     <ChatSpinner />
                 </div>
