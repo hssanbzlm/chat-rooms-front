@@ -12,13 +12,9 @@ export function useFetchMessages(list: Ref<number>, msgToSkip: Ref<number>) {
     })
   }
 
-  watch(
-    list,
-    () => {
-      loadMessages()
-    },
-    { immediate: true }
-  )
+  watch(list, () => {
+    if (list.value > 0) loadMessages()
+  })
 
   return {
     loadMessages,
