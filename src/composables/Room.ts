@@ -18,6 +18,7 @@ export function useRoom() {
     const { data } = await execute(leaveRoomUrl, { withCredentials: true, method: postMethod })
     if (data) {
       socket.disconnect()
+      socket.off()
       userStore.setUser(undefined)
       router.push({ name: 'join' })
     }
@@ -27,6 +28,7 @@ export function useRoom() {
     if (data) {
       socket.emit('room:destroyed')
       socket.disconnect()
+      socket.off()
       userStore.setUser(undefined)
       router.push({ name: 'join' })
     }
