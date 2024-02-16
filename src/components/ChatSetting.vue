@@ -23,37 +23,21 @@
 </template>
 <script setup lang="ts">
 import router from '@/router';
-import { useAxios } from '@vueuse/integrations/useAxios';
-import { useUser } from "@/store/User"
-import { deleteMethod, destroyRoomUrl, leaveRoomUrl, postMethod } from "@/api/requests"
-import socket from '@/listeners/socket';
 import AppModal from './AppModal.vue';
-
+import { useRoom } from '@/composables/Room'
+const { leaveRoom, destroyRoom } = useRoom()
 const props = defineProps<{ isAdmin: boolean }>()
-const { execute } = useAxios()
-const userStore = useUser()
 
 const onLeave = async () => {
-    const { data } = await execute(leaveRoomUrl, { withCredentials: true, method: postMethod })
-    if (data) {
-        socket.disconnect()
-        userStore.setUser(undefined)
-        router.push({ name: 'join' })
-    }
+    await leaveRoom()
 }
 
 const onDestroy = async () => {
-    const { data } = await execute(destroyRoomUrl, { withCredentials: true, method: deleteMethod })
-    if (data) {
-        socket.disconnect()
-        userStore.setUser(undefined)
-        router.push({ name: 'join' })
-    }
+    await destroyRoom()
 }
 
 const redirectToProfile = () => {
     router.push({ name: 'profile' })
-
 }
 
 

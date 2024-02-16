@@ -8,11 +8,14 @@ import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/store/Message'
 import { useTypingUsers } from "@/composables/TypingUsers"
 import { computed, onMounted } from 'vue'
+import { useRoom } from '@/composables/Room'
 const { typingUserEmitter, finishTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
+const { bindRoomState } = useRoom()
 const messageStore = useMessage()
 
 onMounted(() => {
     bindTypingUsers()
+    bindRoomState()
 })
 
 const sendMessage = (message: string) => {
