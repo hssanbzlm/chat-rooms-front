@@ -8,7 +8,7 @@ export const useUser = defineStore('user', () => {
   const { isLoading, error, execute } = useAxios()
   const user = ref<User>()
 
-  const joinRoom = async ({ username, roomCode }: { username: any; roomCode: any }) => {
+  const joinRoom = async ({ username, roomCode }: { username: string; roomCode: string }) => {
     const { data } = await execute(joinRoomUrl, {
       withCredentials: true,
       method: postMethod,
