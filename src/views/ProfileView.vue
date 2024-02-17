@@ -38,7 +38,7 @@ const onBack = () => {
             <div class="card">
                 <div class="card-body">
                     <span role="button" @click="onBack()">
-                        <font-awesome-icon :icon="['fas', 'arrow-alt-circle-left']" size="sm" />
+                        <font-awesome-icon :icon="['fas', 'arrow-alt-circle-left']" size="xl" color="grey" />
                     </span>
                     <div class="d-flex flex-column align-items-center text-center">
                         <label for="image">
