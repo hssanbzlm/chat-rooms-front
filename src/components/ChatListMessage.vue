@@ -6,7 +6,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import ChatMessage from "@/components/ChatMessage.vue"
 import { useMessage } from '@/store/Message'
 import { useInfiniteScroll } from '@vueuse/core'
@@ -17,14 +17,12 @@ const messageStore = useMessage()
 
 onMounted(() => {
     messageStore.bindMessagesEvents()
-    messageStore.loadNextMessages()
+    if (messageStore.messages.length == 0)
+        messageStore.loadNextMessages()
 })
 
 useInfiniteScroll(el, () => {
     messageStore.loadNextMessages()
 }, { distance: 50, direction: 'top', interval: 2000, canLoadMore: () => !messageStore.isLast })
 
-onUnmounted(() => {
-    messageStore.resetMessages()
-})
 </script>
