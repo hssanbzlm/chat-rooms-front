@@ -14,7 +14,7 @@ export function useProfileUpdate() {
     newFullName.value = fullName
   }
 
-  const onUpdateAvatar = (file: any) => {
+  const onUpdateAvatar = (file: File) => {
     previewAvatar.value = URL.createObjectURL(file)
     newAvatar.value = file
   }

@@ -11,8 +11,9 @@ const onFullNameChange = () => {
     isUpdatingFullName.value = false
     onUpdateFullName(fullNameRef.value?.textContent!)
 }
-const onAvatarChange = (e: any) => {
-    const file = e.target.files[0]
+const onAvatarChange = (e: Event) => {
+    const target = e.target as HTMLInputElement
+    const file = (target.files as FileList)[0]
     onUpdateAvatar(file)
 }
 const canUpdate = computed(() => {
