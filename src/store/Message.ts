@@ -13,6 +13,7 @@ export const useMessage = defineStore('message', () => {
   const messages = ref<message[]>([])
 
   const bindMessagesEvents = () => {
+    socket.off('user:message')
     socket.on('user:message', (data) => {
       messages.value.push(data)
       msgToSkip.value += 1
