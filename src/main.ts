@@ -5,17 +5,9 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-  faMagnifyingGlass,
-  faPaperPlane,
-  faPencil,
-  faArrowAltCircleLeft
-} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@/plugins/fa-icons'
 import { createPinia } from 'pinia'
 
-library.add(faMagnifyingGlass, faPaperPlane, faPencil, faArrowAltCircleLeft)
 const pinia = createPinia()
 const app = createApp(App)
 
