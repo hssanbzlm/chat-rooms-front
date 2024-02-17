@@ -6,16 +6,13 @@ import ChatHeader from '@/components/ChatHeader.vue'
 import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/store/Message'
-import { useTypingUsers } from "@/composables/TypingUsers"
+import { useTypingUsers } from "@/store/TypingUsers"
 import { computed, onMounted } from 'vue'
-import { useRoom } from '@/composables/Room'
-const { typingUserEmitter, finishTypingUserEmitter, bindTypingUsers, typingUsers } = useTypingUsers()
-const { bindRoomState } = useRoom()
+const useTypingUserStore = useTypingUsers()
 const messageStore = useMessage()
 
 onMounted(() => {
-    bindTypingUsers()
-    bindRoomState()
+    useTypingUserStore.finishTypingUserEmitter()
 })
 
 const sendMessage = (message: string) => {
@@ -23,14 +20,14 @@ const sendMessage = (message: string) => {
     messageStore.messageEmitter({ content: message, date })
 }
 const isTyping = () => {
-    typingUserEmitter()
+    useTypingUserStore.typingUserEmitter()
 }
 const isNotTyping = () => {
-    finishTypingUserEmitter()
+    useTypingUserStore.finishTypingUserEmitter()
 }
 
 const typing = computed(() => {
-    return typingUsers.value.length > 0 ? typingUsers.value.join(',') + ' typing' : ''
+    return useTypingUserStore.typingUsers.length > 0 ? useTypingUserStore.typingUsers.join(',') + ' typing' : ''
 })
 
 </script>
@@ -73,4 +70,4 @@ const typing = computed(() => {
     }
 }
 </style>
-@/store/Message
+@/store/Message@/store/TypingUsers

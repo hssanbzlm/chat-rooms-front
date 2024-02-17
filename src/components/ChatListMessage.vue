@@ -16,7 +16,6 @@ const el = ref<HTMLElement>()
 const messageStore = useMessage()
 
 onMounted(() => {
-    messageStore.bindMessagesEvents()
     if (messageStore.messages.length == 0)
         messageStore.loadNextMessages()
 })

@@ -11,7 +11,6 @@ export function useRoom() {
   const messageStore = useMessage()
 
   const bindRoomState = () => {
-    socket.off('room:destroyed')
     socket.on('room:destroyed', async () => {
       await leaveRoom()
     })

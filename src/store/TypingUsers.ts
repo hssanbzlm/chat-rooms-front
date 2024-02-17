@@ -1,15 +1,14 @@
 import { ref } from 'vue'
 import socket from '@/listeners/socket'
 import { useUser } from '@/store/User'
-export function useTypingUsers() {
+import { defineStore } from 'pinia'
+export const useTypingUsers = defineStore('typingUsers', () => {
   const userStore = useUser()
   const typingUsers = ref<string[]>([])
-
   const bindTypingUsers = () => {
-    socket.off('user:typing')
-    socket.off('user:finish-typing')
     socket.on('user:typing', (payload: string) => {
-      typingUsers.value.push(payload)
+      if (typingUsers.value.findIndex((fullName) => fullName === fullName) == -1)
+        typingUsers.value.push(payload)
     })
     socket.on('user:finish-typing', (payload: string) => {
       typingUsers.value = typingUsers.value.filter((fn) => fn !== payload)
@@ -29,4 +28,4 @@ export function useTypingUsers() {
     finishTypingUserEmitter,
     typingUsers
   }
-}
+})

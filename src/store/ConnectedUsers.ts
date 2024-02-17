@@ -6,8 +6,6 @@ export const useConnectedUsers = defineStore('connectedUsers', () => {
   const connectedUsers = ref<User[]>([])
 
   const bindConnectedUsersEvent = () => {
-    socket.off('user:join')
-    socket.off('user:leave')
     socket.on('user:join', (data) => {
       connectedUsers.value = data
     })
