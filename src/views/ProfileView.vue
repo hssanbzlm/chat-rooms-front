@@ -2,6 +2,7 @@
 import { useUser } from "@/store/User"
 import { computed, ref } from "vue"
 import { useProfileUpdate } from "@/composables/ProfileUpdate"
+import router from "@/router";
 const userStore = useUser()
 const { onUpdate, onUpdateFullName, onUpdateAvatar, newFullName, newAvatar, previewAvatar } = useProfileUpdate()
 const fullNameRef = ref<HTMLElement>()
@@ -26,13 +27,19 @@ const onSave = async () => {
 const onFullNameFocus = () => {
     isUpdatingFullName.value = true
 }
-
+const onBack = () => {
+    router.push({ path: '/chat' })
+}
 </script>
 <template>
     <div class="row g-0 justify-content-center mt-5">
+
         <div class="col-12 col-sm-6">
             <div class="card">
                 <div class="card-body">
+                    <span role="button" @click="onBack()">
+                        <font-awesome-icon :icon="['fas', 'arrow-alt-circle-left']" size="sm" />
+                    </span>
                     <div class="d-flex flex-column align-items-center text-center">
                         <label for="image">
                             <input v-if="!userStore.isLoading" type="file" name="image" id="image" class="d-none"
