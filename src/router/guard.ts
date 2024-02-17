@@ -4,8 +4,8 @@ import { isAuthUrl, getMethod } from '@/api/requests'
 import { useUser } from '@/store/User'
 const { execute } = useAxios()
 router.beforeEach(async (to, from, next) => {
+  const userStore = useUser()
   if (to.meta.requiresAuth) {
-    const userStore = useUser()
     if (userStore.user) {
       next()
     } else {
@@ -20,9 +20,10 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (to.redirectedFrom && to.redirectedFrom.name === 'chat') next()
+    if (userStore.user) next({ name: 'chat-main' })
+    else if (to.redirectedFrom && to.redirectedFrom.name === 'chat-main') next()
     else if (to.redirectedFrom === undefined && from.name === undefined) {
-      next({ path: 'chat' })
+      next({ name: 'chat-main' })
     } else next()
   }
 })
