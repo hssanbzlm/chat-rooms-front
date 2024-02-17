@@ -7,7 +7,7 @@ export const useTypingUsers = defineStore('typingUsers', () => {
   const typingUsers = ref<string[]>([])
   const bindTypingUsers = () => {
     socket.on('user:typing', (payload: string) => {
-      if (typingUsers.value.findIndex((fullName) => fullName === fullName) == -1)
+      if (typingUsers.value.findIndex((fullName) => fullName === payload) == -1)
         typingUsers.value.push(payload)
     })
     socket.on('user:finish-typing', (payload: string) => {
