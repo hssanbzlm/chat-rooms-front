@@ -28,8 +28,17 @@ export const router = createRouter({
         requiresAuth: true
       },
       children: [
-        { path: '', name: 'chat-main', component: () => import('@/components/ChatMain.vue') },
-        { path: 'profile', name: 'profile', component: () => import('@/views/ProfileView.vue') }
+        {
+          path: '',
+          name: 'chat-room-main',
+          component: () => import('@/components/ChatRoomMain.vue')
+        },
+        { path: 'profile', name: 'profile', component: () => import('@/views/ProfileView.vue') },
+        {
+          path: 'private/:idUser',
+          name: 'chat-private-main',
+          component: () => import('@/components/ChatPrivateMain.vue')
+        }
       ]
     }
   ]
