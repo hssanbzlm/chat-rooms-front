@@ -21,4 +21,3 @@ bindTypingUsers()
 </template>
 
 <style scoped></style>
-@/store/ConnectedUsers@/store/TypingUsers
