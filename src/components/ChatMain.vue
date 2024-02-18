@@ -6,10 +6,12 @@ import ChatHeader from '@/components/ChatHeader.vue'
 import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/store/Message'
+import { useUser } from '@/store/User';
 import { useTypingUsers } from "@/store/TypingUsers"
 import { computed, onMounted } from 'vue'
 const useTypingUserStore = useTypingUsers()
 const messageStore = useMessage()
+const userStore = useUser()
 
 onMounted(() => {
     useTypingUserStore.finishTypingUserEmitter()
@@ -30,6 +32,9 @@ const typing = computed(() => {
     return useTypingUserStore.typingUsers.length > 0 ? useTypingUserStore.typingUsers.join(',') + ' typing' : ''
 })
 
+const loadNextMessages = () => {
+    messageStore.loadNextMessages()
+}
 </script>
 
 <template>
@@ -42,14 +47,15 @@ const typing = computed(() => {
                 </div>
             </div>
             <div class="chat w-100">
-                <ChatHeader />
+                <ChatHeader :name="userStore.user?.roomName!" />
                 <div v-if="messageStore.isLoading" class="position-absolute start-50 mt-1">
                     <ChatSpinner />
                 </div>
                 <div v-if="messageStore.error">
                     <ChatAlert msg="Error loading messages" type="alert-danger" />
                 </div>
-                <ChatListMessage />
+                <ChatListMessage :messages="messageStore.messages" :isLast="messageStore.isLast"
+                    @load-next-messages="loadNextMessages" />
                 <div v-if="messageStore.messages" class="mb-1 p-1">
                     <small class="text-muted">{{ typing }}</small>
                     <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage"
@@ -70,4 +76,3 @@ const typing = computed(() => {
     }
 }
 </style>
-@/store/Message@/store/TypingUsers
