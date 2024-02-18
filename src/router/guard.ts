@@ -20,10 +20,10 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (userStore.user) next({ name: 'chat-main' })
-    else if (to.redirectedFrom && to.redirectedFrom.name === 'chat-main') next()
+    if (userStore.user) next({ name: 'chat-room-main' })
+    else if (to.redirectedFrom && to.redirectedFrom.name === 'chat-room-main') next()
     else if (to.redirectedFrom === undefined && from.name === undefined) {
-      next({ name: 'chat-main' })
+      next({ name: 'chat-room-main' })
     } else next()
   }
 })
