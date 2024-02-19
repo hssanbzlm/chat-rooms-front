@@ -2,10 +2,9 @@ import type { message } from '@/interfaces/message'
 import { ref, watch, toValue } from 'vue'
 import { useFetchMessages } from '@/composables/FetchMessages'
 import socket from '@/listeners/socket'
-import { defineStore } from 'pinia'
-import { getMessagesUrl } from '@/api/requests'
+import { getPrivateMessagesUrl } from '@/api/requests'
 
-export const useMessage = defineStore('message', () => {
+export const usePrivateMessages = () => {
   const list = ref(0)
   const msgToSkip = ref(0)
   const isLast = ref(true)
@@ -13,24 +12,37 @@ export const useMessage = defineStore('message', () => {
 
   const messages = ref<message[]>([])
 
-  const bindMessagesEvents = () => {
-    socket.on('user:message', (data) => {
-      messages.value.push(data)
+  const bindPrivateMessagesEvents = () => {
+    socket.off('user-private:message')
+    socket.on('user-private:message', (message: message) => {
+      messages.value.push(message)
       msgToSkip.value += 1
     })
   }
-
-  const messageEmitter = ({ content, date }: { content: string; date: Date }) => {
-    socket.emit('user:message', { content, date })
+  const joinRoomEmitter = (privateChatName: string) => {
+    socket.emit('user-private:join', privateChatName)
+  }
+  const messageEmitter = ({
+    content,
+    date,
+    userId,
+    privateChatName
+  }: {
+    content: string
+    date: Date
+    userId: string
+    privateChatName: string
+  }) => {
+    socket.emit('user-private:message', { to: userId, content, date, privateChatName })
   }
   watch(data, () => {
     messages.value.unshift(...data.value.messages)
     isLast.value = data.value.lastList
   })
 
-  const loadNextMessages = () => {
+  const loadNextMessages = (userId: string) => {
     list.value += 1
-    const url = `${getMessagesUrl}/${toValue(list)}?skip=${toValue(msgToSkip)}`
+    const url = `${getPrivateMessagesUrl}/${userId}/${toValue(list)}?skip=${toValue(msgToSkip)}`
     loadMessages(url)
   }
   const resetMessages = () => {
@@ -47,9 +59,10 @@ export const useMessage = defineStore('message', () => {
     error,
     messages,
     isLast,
-    bindMessagesEvents,
+    bindPrivateMessagesEvents,
+    joinRoomEmitter,
     resetMessages,
     messageEmitter,
     loadNextMessages
   }
-})
+}

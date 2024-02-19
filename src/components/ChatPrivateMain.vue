@@ -5,38 +5,54 @@ import ChatHeader from '@/components/ChatHeader.vue'
 import ChatSpinner from "@/components/ChatSpinner.vue"
 import ChatAlert from '@/components/ChatAlert.vue'
 import { useUser } from '@/store/User';
-import type { message } from '@/interfaces/message';
+import { useConnectedUsers } from '@/store/ConnectedUsers';
+import { privateChatGenerator } from '@/utils/utils'
 import router from '@/router';
-const messages: message[] = [{ _id: 'unique', content: 'works', date: new Date(), sender: { _id: 'unique2', fullName: 'JJ', roomName: '', isAdmin: false, userName: '', avatar: '' }, receiver: '' }]
-const isLast = true
-const isLoading = false
-const isError = false
+import { usePrivateMessages } from '@/composables/PrivateMessages';
+import { onBeforeMount, onMounted, onUnmounted } from 'vue';
+
+
+const { isLoading, error, messages, bindPrivateMessagesEvents, loadNextMessages, resetMessages, messageEmitter, joinRoomEmitter, isLast } = usePrivateMessages()
 const userStore = useUser()
-const chatWith = router.currentRoute.value.params['idUser']
-console.log(chatWith)
+const connectedUserStore = useConnectedUsers()
+const userId = router.currentRoute.value.params['idUser'] as string
+const chatWith = connectedUserStore.connectedUsers.find((u) => u.userId === userId)
+const privateChatName = privateChatGenerator(chatWith?.userName!, userStore.user?.userName!)
+bindPrivateMessagesEvents()
+
+onBeforeMount(() => {
+    if (!chatWith)
+        router.push({ path: '/chat' })
+})
+onMounted(() => {
+    joinRoomEmitter(privateChatName)
+})
+
+onUnmounted(() => {
+    resetMessages()
+})
 
 const sendMessage = (message: string) => {
-    console.log('message sent')
+    messageEmitter({ content: message, date: new Date(), privateChatName, userId })
+}
+const loadMore = () => {
+    loadNextMessages(userId)
 }
 
-
-const loadNextMessages = () => {
-    console.log('next messages')
-}
 </script>
 
 <template>
     <div class="container pt-1 d-flex justify-content-center">
         <div class="card shadow-lg mb-4 d-flex flex-row w-75">
             <div class="chat w-100">
-                <ChatHeader :name="userStore.user?.roomName!" />
+                <ChatHeader v-if="chatWith" :name="chatWith.fullName!" />
                 <div v-if="isLoading" class="position-absolute start-50 mt-1">
                     <ChatSpinner />
                 </div>
-                <div v-if="isError">
+                <div v-if="error">
                     <ChatAlert msg="Error loading messages" type="alert-danger" />
                 </div>
-                <ChatListMessage :messages="messages" :isLast="isLast" @load-next-messages="loadNextMessages" />
+                <ChatListMessage :messages="messages" :isLast="isLast" @load-next-messages="loadMore" />
                 <div v-if="messages" class="mb-1 p-1">
                     <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage" />
                 </div>

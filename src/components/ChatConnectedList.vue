@@ -1,6 +1,7 @@
 <template>
-    <li v-for="user in connectedUsersStore.connectedUsers" :key="user._id" class="list-group-item p-2 float-start"
-        @click="toPrivate(user._id)">
+    <li v-for="user in connectedUsersStore.connectedUsers" :key="user.userId"
+        :class="['list-group-item p-2 float-start', { 'link': user.userId != userStore.user?.userId }]"
+        @click="toPrivate(user.userId)">
         <img :src="user.avatar ? user.avatar : 'https://ui-avatars.com/api/?name=' + `${user.fullName}`" alt="avatar"
             class="rounded-circle float-start avatar">
         <div class="about float-start ps-2 pt-1">
@@ -10,12 +11,15 @@
     </li>
 </template>
 <script setup lang="ts">
-import router from '@/router';
 import { useConnectedUsers } from '@/store/ConnectedUsers';
+import { useUser } from "@/store/User"
 const connectedUsersStore = useConnectedUsers()
-const toPrivate = (idUser: string) => {
-    router.push({ path: `chat/private/${idUser}` })
+const userStore = useUser()
 
+const toPrivate = (idUser: string) => {
+    if (userStore.user?.userId !== idUser) {
+        window.open(`chat/private/${idUser}`, '_blank')
+    }
 }
 
 </script>
@@ -31,5 +35,9 @@ const toPrivate = (idUser: string) => {
 
 .user-status {
     font-size: 0.7em;
+}
+
+.link {
+    cursor: pointer;
 }
 </style>
