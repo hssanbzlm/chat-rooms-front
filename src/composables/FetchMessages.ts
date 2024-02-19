@@ -1,20 +1,15 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
-import { getMethod, getMessagesUrl } from '@/api/requests'
-import { toValue, type Ref, watch } from 'vue'
+import { getMethod } from '@/api/requests'
 
-export function useFetchMessages(list: Ref<number>, msgToSkip: Ref<number>) {
+export function useFetchMessages() {
   const { isLoading, error, data, execute } = useAxios()
 
-  const loadMessages = async () => {
-    await execute(`${getMessagesUrl}/${toValue(list)}?skip=${toValue(msgToSkip)}`, {
+  const loadMessages = async (url: string) => {
+    await execute(url, {
       method: getMethod,
       withCredentials: true
     })
   }
-
-  watch(list, () => {
-    if (list.value > 0) loadMessages()
-  })
 
   return {
     loadMessages,

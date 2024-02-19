@@ -10,4 +10,5 @@ export const joinRoomUrl = `${baseUrl}/api/auth/join`
 export const leaveRoomUrl = `${baseUrl}/api/auth/leave`
 export const isAuthUrl = `${baseUrl}/api/auth/is-auth`
 export const getMessagesUrl = `${baseUrl}/api/messages/get-messages`
+export const getPrivateMessagesUrl = `${baseUrl}/api/messages/get-private-messages`
 export const updateUserUrl = `${baseUrl}/api/user/update`
