@@ -8,15 +8,24 @@ export const usePrivateMessages = () => {
   const list = ref(0)
   const msgToSkip = ref(0)
   const isLast = ref(true)
+  const isTyping = ref(false)
   const { data, isLoading, error, loadMessages } = useFetchMessages()
 
   const messages = ref<message[]>([])
 
   const bindPrivateMessagesEvents = () => {
     socket.off('user-private:message')
+    socket.off('user-private:typing')
+    socket.off('user-private:finish-typing')
     socket.on('user-private:message', (message: message) => {
       messages.value.push(message)
       msgToSkip.value += 1
+    })
+    socket.on('user-private:typing', () => {
+      isTyping.value = true
+    })
+    socket.on('user-private:finish-typing', () => {
+      isTyping.value = false
     })
   }
   const joinRoomEmitter = (privateChatName: string) => {
@@ -59,6 +68,7 @@ export const usePrivateMessages = () => {
     error,
     messages,
     isLast,
+    isTyping,
     bindPrivateMessagesEvents,
     joinRoomEmitter,
     resetMessages,
