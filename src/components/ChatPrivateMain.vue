@@ -13,7 +13,7 @@ import { onBeforeMount, onMounted, onUnmounted, computed } from 'vue';
 import socket from '@/listeners/socket';
 
 
-const { isLoading, error, messages, bindPrivateMessagesEvents, loadNextMessages, resetMessages, messageEmitter, joinRoomEmitter, isLast, isTyping } = usePrivateMessages()
+const { isLoading, error, messages, bindPrivateMessagesEvents, loadNextMessages, resetMessages, messageEmitter, joinPrivateEmitter, isLast, isTyping } = usePrivateMessages()
 const userStore = useUser()
 const connectedUserStore = useConnectedUsers()
 const userId = router.currentRoute.value.params['idUser'] as string
@@ -26,7 +26,7 @@ onBeforeMount(() => {
         router.push({ path: '/chat' })
 })
 onMounted(() => {
-    joinRoomEmitter(privateChatName)
+    joinPrivateEmitter(privateChatName)
 })
 
 onUnmounted(() => {

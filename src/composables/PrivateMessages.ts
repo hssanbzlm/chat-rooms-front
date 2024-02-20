@@ -28,7 +28,7 @@ export const usePrivateMessages = () => {
       isTyping.value = false
     })
   }
-  const joinRoomEmitter = (privateChatName: string) => {
+  const joinPrivateEmitter = (privateChatName: string) => {
     socket.emit('user-private:join', privateChatName)
   }
   const messageEmitter = ({
@@ -70,7 +70,7 @@ export const usePrivateMessages = () => {
     isLast,
     isTyping,
     bindPrivateMessagesEvents,
-    joinRoomEmitter,
+    joinPrivateEmitter,
     resetMessages,
     messageEmitter,
     loadNextMessages
