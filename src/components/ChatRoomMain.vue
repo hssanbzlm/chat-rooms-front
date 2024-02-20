@@ -8,10 +8,16 @@ import ChatAlert from '@/components/ChatAlert.vue'
 import { useMessage } from '@/store/Message'
 import { useUser } from '@/store/User';
 import { useTypingUsers } from "@/store/TypingUsers"
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import SearchInput from './SearchInput.vue';
+import { useConnectedUsers } from '@/store/ConnectedUsers';
+
 const useTypingUserStore = useTypingUsers()
 const messageStore = useMessage()
 const userStore = useUser()
+const useConnectedUsersStore = useConnectedUsers()
+const searchText = ref('')
+
 
 onMounted(() => {
     useTypingUserStore.finishTypingUserEmitter()
@@ -35,15 +41,21 @@ const typing = computed(() => {
 const loadNextMessages = () => {
     messageStore.loadNextMessages()
 }
+const handleSearch = (text: string) => {
+    searchText.value = text
+}
+const displayedUsers = computed(() => {
+    return useConnectedUsersStore.connectedUsers.filter((user) => user.fullName.includes(searchText.value.trim()))
+})
 </script>
 
 <template>
     <div class="container pt-1">
         <div class="card shadow-lg mb-4 d-flex flex-row">
             <div class="people-list p-3 d-none d-md-inline ">
-                <ChatInput size="xl" icon="magnifying-glass" placeholder="Search ...." />
+                <SearchInput @search="handleSearch" />
                 <div class="chat-list overflow-auto mt-4 mb-0">
-                    <ChatConnectedList />
+                    <ChatConnectedList :connectedUsers="displayedUsers" />
                 </div>
             </div>
             <div class="chat w-100">
