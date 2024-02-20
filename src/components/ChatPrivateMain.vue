@@ -9,10 +9,11 @@ import { useConnectedUsers } from '@/store/ConnectedUsers';
 import { privateChatGenerator } from '@/utils/utils'
 import router from '@/router';
 import { usePrivateMessages } from '@/composables/PrivateMessages';
-import { onBeforeMount, onMounted, onUnmounted } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted, computed } from 'vue';
+import socket from '@/listeners/socket';
 
 
-const { isLoading, error, messages, bindPrivateMessagesEvents, loadNextMessages, resetMessages, messageEmitter, joinRoomEmitter, isLast } = usePrivateMessages()
+const { isLoading, error, messages, bindPrivateMessagesEvents, loadNextMessages, resetMessages, messageEmitter, joinRoomEmitter, isLast, isTyping } = usePrivateMessages()
 const userStore = useUser()
 const connectedUserStore = useConnectedUsers()
 const userId = router.currentRoute.value.params['idUser'] as string
@@ -38,6 +39,16 @@ const sendMessage = (message: string) => {
 const loadMore = () => {
     loadNextMessages(userId)
 }
+const userTyping = () => {
+    socket.emit('user-private:typing', privateChatName)
+}
+const userNotTyping = () => {
+    socket.emit('user-private:finish-typing', privateChatName)
+}
+
+const typing = computed(() => {
+    return isTyping.value ? `${chatWith?.fullName} is typing` : ''
+})
 
 </script>
 
@@ -54,16 +65,12 @@ const loadMore = () => {
                 </div>
                 <ChatListMessage :messages="messages" :isLast="isLast" @load-next-messages="loadMore" />
                 <div v-if="messages" class="mb-1 p-1">
-                    <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage" />
+                    <small class="text-muted">{{ typing }}</small>
+                    <ChatInput @typing="userTyping" @not-typing="userNotTyping" size="xl" icon="paper-plane"
+                        placeholder="Enter text here..." @send-message="sendMessage" />
                 </div>
             </div>
         </div>
     </div>
 </template>
-<style scoped>
-@media (min-width: 768px) {
-    .chat {
-        border-left: 1px solid #eaeaea
-    }
-}
-</style>
+<style scoped></style>
