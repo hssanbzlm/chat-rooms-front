@@ -1,5 +1,5 @@
 <template>
-    <li v-for="user in connectedUsersStore.connectedUsers" :key="user.userId"
+    <li v-for="user in props.connectedUsers" :key="user.userId"
         :class="['list-group-item p-2 float-start', { 'link': user.userId != userStore.user?.userId }]"
         @click="toPrivate(user.userId)">
         <img :src="user.avatar ? user.avatar : 'https://ui-avatars.com/api/?name=' + `${user.fullName}`" alt="avatar"
@@ -11,11 +11,10 @@
     </li>
 </template>
 <script setup lang="ts">
-import { useConnectedUsers } from '@/store/ConnectedUsers';
+import type { User } from '@/interfaces/user';
 import { useUser } from "@/store/User"
-const connectedUsersStore = useConnectedUsers()
 const userStore = useUser()
-
+const props = defineProps<{ connectedUsers: User[] }>()
 const toPrivate = (idUser: string) => {
     if (userStore.user?.userId !== idUser) {
         window.open(`chat/private/${idUser}`, '_blank')
