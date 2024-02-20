@@ -6,6 +6,8 @@ export const useTypingUsers = defineStore('typingUsers', () => {
   const userStore = useUser()
   const typingUsers = ref<string[]>([])
   const bindTypingUsers = () => {
+    socket.off('user:typing')
+    socket.off('user:finish-typing')
     socket.on('user:typing', (payload: string) => {
       if (
         payload !== userStore.user?.fullName &&
