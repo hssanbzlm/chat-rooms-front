@@ -4,13 +4,18 @@ import { deleteMethod, destroyRoomUrl, leaveRoomUrl, postMethod } from '@/api/re
 import { useUser } from '@/store/User'
 import router from '@/router'
 import { useMessage } from '@/store/Message'
+import { useTypingUsers } from '@/store/TypingUsers'
+import { useConnectedUsers } from '@/store/ConnectedUsers'
 
 export function useRoom() {
   const { isLoading, error, execute } = useAxios()
   const userStore = useUser()
   const messageStore = useMessage()
+  const typingUsersStore = useTypingUsers()
+  const connectedUsersStore = useConnectedUsers()
 
   const bindRoomState = () => {
+    socket.off('room:destroyed')
     socket.on('room:destroyed', async () => {
       await leaveRoom()
     })
@@ -22,6 +27,8 @@ export function useRoom() {
       socket.disconnect()
       userStore.setUser(undefined)
       messageStore.resetMessages()
+      typingUsersStore.typingUsers = []
+      connectedUsersStore.connectedUsers = []
       router.push({ name: 'join' })
     }
   }
@@ -31,6 +38,8 @@ export function useRoom() {
       socket.emit('room:destroyed')
       socket.disconnect()
       userStore.setUser(undefined)
+      typingUsersStore.typingUsers = []
+      connectedUsersStore.connectedUsers = []
       messageStore.resetMessages()
       router.push({ name: 'join' })
     }
