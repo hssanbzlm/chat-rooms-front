@@ -7,7 +7,7 @@
             <img v-if="!isMyMessage" :src="myAvatar" alt="avatar" class="rounded-circle avatar">
         </div>
         <div class="fst-italic" :class="[{ 'me-2': isMyMessage }]">
-            <div class="message-data-time">{{ msgDate.value }}</div>
+            <div class="message-data-time">{{ msgDate }}</div>
         </div>
         <div :class="['message p-2 rounded', isMyMessage ? 'my-message' : 'other-message']">
             <span class="message-content">{{ props.msg.content }}</span>
@@ -28,7 +28,7 @@ const isMyMessage = computed(() => {
 })
 
 const msgDate = computed(() => {
-    return useDateFormat(props.msg.date, 'dddd HH:mm aa MMMM-DD ')
+    return useDateFormat(props.msg.date, 'dddd HH:mm aa MMMM-DD ').value
 })
 
 const myAvatar = computed(() => {

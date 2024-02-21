@@ -3,7 +3,10 @@ import { useUser } from "@/store/User"
 import { computed, ref } from "vue"
 import { useProfileUpdate } from "@/composables/ProfileUpdate"
 import router from "@/router";
+import { storeToRefs } from 'pinia'
+
 const userStore = useUser()
+const { user, isLoading } = storeToRefs(userStore)
 const { onUpdate, onUpdateFullName, onUpdateAvatar, newFullName, newAvatar, previewAvatar } = useProfileUpdate()
 const fullNameRef = ref<HTMLElement>()
 const isUpdatingFullName = ref(false)
@@ -18,7 +21,7 @@ const onAvatarChange = (e: Event) => {
     onUpdateAvatar(file)
 }
 const canUpdate = computed(() => {
-    return (newFullName.value && newFullName.value != '' && newFullName.value !== userStore.user?.fullName || newAvatar.value != undefined)
+    return (newFullName.value && newFullName.value != '' && newFullName.value !== user.value?.fullName || newAvatar.value != undefined)
 })
 
 const onSave = async () => {
@@ -42,8 +45,8 @@ const onBack = () => {
                     </span>
                     <div class="d-flex flex-column align-items-center text-center">
                         <label for="image">
-                            <input v-if="!userStore.isLoading" type="file" name="image" id="image" class="d-none"
-                                accept="image/*" @change="onAvatarChange" />
+                            <input v-if="!isLoading" type="file" name="image" id="image" class="d-none" accept="image/*"
+                                @change="onAvatarChange" />
                             <div class="position-relative">
                                 <img :src="previewAvatar"
                                     class="profile-avatar position-absolute rounded-circle bg-light p-1" role="button">
@@ -52,16 +55,15 @@ const onBack = () => {
                         </label>
                         <div class="mt-3">
                             <div class="fullName-container d-flex">
-                                <h4 class="p-1 fullName-content" :contenteditable="!userStore.isLoading"
-                                    @blur="onFullNameChange" @focus="onFullNameFocus" v-text="userStore.user?.fullName"
-                                    ref="fullNameRef">
+                                <h4 class="p-1 fullName-content" :contenteditable="!isLoading" @blur="onFullNameChange"
+                                    @focus="onFullNameFocus" v-text="user?.fullName" ref="fullNameRef">
                                 </h4>
                                 <font-awesome-icon class="update-fa" :icon="['fas', 'pencil']" :size="'sm'" />
                             </div>
-                            <p class="text-secondary mb-1">{{ userStore.user?.userName }}</p>
-                            <button v-if="canUpdate && !userStore.isLoading" :disabled="isUpdatingFullName"
+                            <p class="text-secondary mb-1">{{ user?.userName }}</p>
+                            <button v-if="canUpdate && !isLoading" :disabled="isUpdatingFullName"
                                 class="btn btn-outline-primary mt-2" @click="onSave">Save</button>
-                            <button v-if="userStore.isLoading" class="btn btn-outline-primary" type="button">
+                            <button v-if="isLoading" class="btn btn-outline-primary" type="button">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             </button>
                         </div>

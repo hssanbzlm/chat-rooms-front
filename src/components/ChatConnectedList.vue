@@ -1,11 +1,11 @@
 <template>
-    <li v-for="user in props.connectedUsers" :key="user.userId"
-        :class="['list-group-item p-2 float-start', { 'link': user.userId != userStore.user?.userId }]"
-        @click="toPrivate(user.userId)">
-        <img :src="user.avatar ? user.avatar : 'https://ui-avatars.com/api/?name=' + `${user.fullName}`" alt="avatar"
-            class="rounded-circle float-start avatar">
+    <li v-for="connectedUser in props.connectedUsers" :key="connectedUser.userId"
+        :class="['list-group-item p-2 float-start', { 'link': connectedUser.userId != user?.userId }]"
+        @click="toPrivate(connectedUser.userId)">
+        <img :src="connectedUser.avatar ? connectedUser.avatar : 'https://ui-avatars.com/api/?name=' + `${connectedUser.fullName}`"
+            alt="avatar" class="rounded-circle float-start avatar">
         <div class="about float-start ps-2 pt-1">
-            <div class="user-fullName">{{ user.fullName }}</div>
+            <div class="user-fullName">{{ connectedUser.fullName }}</div>
             <div class="text-secondary user-status"> connected </div>
         </div>
     </li>
@@ -13,10 +13,12 @@
 <script setup lang="ts">
 import type { User } from '@/interfaces/user';
 import { useUser } from "@/store/User"
+import { storeToRefs } from 'pinia'
 const userStore = useUser()
+const { user } = storeToRefs(userStore)
 const props = defineProps<{ connectedUsers: User[] }>()
 const toPrivate = (idUser: string) => {
-    if (userStore.user?.userId !== idUser) {
+    if (user.value?.userId !== idUser) {
         window.open(`chat/private/${idUser}`, '_blank')
     }
 }

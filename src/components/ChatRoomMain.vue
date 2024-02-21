@@ -11,16 +11,21 @@ import { useTypingUsers } from "@/store/TypingUsers"
 import { computed, onMounted, ref } from 'vue'
 import SearchInput from './SearchInput.vue';
 import { useConnectedUsers } from '@/store/ConnectedUsers';
+import { storeToRefs } from 'pinia'
 
-const useTypingUserStore = useTypingUsers()
+const typingUsersStore = useTypingUsers()
+const { typingUsers } = storeToRefs(typingUsersStore)
 const messageStore = useMessage()
+const { isLoading, isLast, error, messages } = storeToRefs(messageStore)
 const userStore = useUser()
-const useConnectedUsersStore = useConnectedUsers()
+const { user } = storeToRefs(userStore)
+const connectedUsersStore = useConnectedUsers()
+const { connectedUsers } = storeToRefs(connectedUsersStore)
 const searchText = ref('')
 
 
 onMounted(() => {
-    useTypingUserStore.finishTypingUserEmitter()
+    typingUsersStore.finishTypingUserEmitter()
 })
 
 const sendMessage = (message: string) => {
@@ -28,24 +33,24 @@ const sendMessage = (message: string) => {
     messageStore.messageEmitter({ content: message, date })
 }
 const isTyping = () => {
-    useTypingUserStore.typingUserEmitter()
+    typingUsersStore.typingUserEmitter()
 }
 const isNotTyping = () => {
-    useTypingUserStore.finishTypingUserEmitter()
+    typingUsersStore.finishTypingUserEmitter()
 }
 
 const typing = computed(() => {
-    return useTypingUserStore.typingUsers.length > 0 ? useTypingUserStore.typingUsers.join(',') + ' typing' : ''
+    return typingUsers.value.length > 0 ? typingUsers.value.join(',') + ' typing' : ''
 })
 
-const loadNextMessages = () => {
+const loadMessages = () => {
     messageStore.loadNextMessages()
 }
 const handleSearch = (text: string) => {
     searchText.value = text
 }
 const displayedUsers = computed(() => {
-    return useConnectedUsersStore.connectedUsers.filter((user) => user.fullName.includes(searchText.value.trim()))
+    return connectedUsers.value.filter((user) => user.fullName.includes(searchText.value.trim()))
 })
 </script>
 
@@ -59,16 +64,15 @@ const displayedUsers = computed(() => {
                 </div>
             </div>
             <div class="chat w-100">
-                <ChatHeader :name="userStore.user?.belongsTo!" />
-                <div v-if="messageStore.isLoading" class="position-absolute start-50 mt-1">
+                <ChatHeader :name="user?.belongsTo!" />
+                <div v-if="isLoading" class="position-absolute start-50 mt-1">
                     <ChatSpinner />
                 </div>
-                <div v-if="messageStore.error">
+                <div v-if="error">
                     <ChatAlert msg="Error loading messages" type="alert-danger" />
                 </div>
-                <ChatListMessage :messages="messageStore.messages" :isLast="messageStore.isLast"
-                    @load-next-messages="loadNextMessages" />
-                <div v-if="messageStore.messages" class="mb-1 p-1">
+                <ChatListMessage :messages="messages" :isLast="isLast" @load-next-messages="loadMessages" />
+                <div v-if="messages" class="mb-1 p-1">
                     <small class="text-muted">{{ typing }}</small>
                     <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage"
                         @typing="isTyping" @not-typing="isNotTyping" />

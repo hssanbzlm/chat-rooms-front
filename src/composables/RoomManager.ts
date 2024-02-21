@@ -10,7 +10,7 @@ import { useConnectedUsers } from '@/store/ConnectedUsers'
 export function useRoom() {
   const { isLoading, error, execute } = useAxios()
   const userStore = useUser()
-  const messageStore = useMessage()
+  const { resetMessages } = useMessage()
   const typingUsersStore = useTypingUsers()
   const connectedUsersStore = useConnectedUsers()
 
@@ -36,7 +36,7 @@ export function useRoom() {
     if (data) {
       socket.disconnect()
       userStore.user = undefined
-      messageStore.resetMessages()
+      resetMessages()
       typingUsersStore.typingUsers = []
       connectedUsersStore.connectedUsers = []
       router.push({ name: 'join' })
@@ -50,7 +50,7 @@ export function useRoom() {
       userStore.user = undefined
       typingUsersStore.typingUsers = []
       connectedUsersStore.connectedUsers = []
-      messageStore.resetMessages()
+      resetMessages()
       router.push({ name: 'join' })
     }
   }
