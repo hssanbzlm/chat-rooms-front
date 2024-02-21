@@ -8,7 +8,7 @@ import { useRoom } from "@/composables/RoomManager"
 import socket from "@/listeners/socket"
 
 const userStore = useUser()
-const roomStore = useRoom()
+const { joinRoom, error, isLoading } = useRoom()
 
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
@@ -20,7 +20,7 @@ const [username] = defineField('username');
 const [roomCode] = defineField('roomCode');
 
 const onSubmit = handleSubmit(async () => {
-    await roomStore.joinRoom({ username: username.value, roomCode: roomCode.value })
+    await joinRoom({ username: username.value, roomCode: roomCode.value })
     if (userStore.user) {
         await router.push({ path: 'chat' })
         socket.connect()
@@ -38,31 +38,29 @@ const redirect = (name: string) => {
                 <div class="row gy-3 overflow-hidden">
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input class="form-control" placeholder="Username" v-model="username"
-                                :disabled="userStore.isLoading">
+                            <input class="form-control" placeholder="Username" v-model="username" :disabled="isLoading">
                             <p v-if="errors.username" class="text-warning">{{ errors.username }}</p>
                             <label for="Username" class="form-label">Username</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-floating mb-3">
-                            <input class="form-control" placeholder="room" v-model="roomCode"
-                                :disabled="userStore.isLoading">
+                            <input class="form-control" placeholder="room" v-model="roomCode" :disabled="isLoading">
                             <p v-if="errors.roomCode" class="text-warning">{{ errors.roomCode }}</p>
                             <label for="room-id" class="form-label">Room</label>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="d-grid">
-                            <button class="btn btn-dark btn-lg" type="submit" :disabled="userStore.isLoading">Join</button>
+                            <button class="btn btn-dark btn-lg" type="submit" :disabled="isLoading">Join</button>
                         </div>
                     </div>
                 </div>
             </form>
-            <div v-if="userStore.isLoading">
+            <div v-if="isLoading">
                 LOADING
             </div>
-            <div v-else-if="userStore.error">
+            <div v-else-if="error">
                 <p class="text-danger"> Error joining a room</p>
             </div>
             <div class="row">
