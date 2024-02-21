@@ -12,7 +12,7 @@ router.beforeEach(async (to, from, next) => {
       try {
         const { data } = await execute(isAuthUrl, { method: getMethod, withCredentials: true })
         if (data.value) {
-          userStore.setUser(data.value)
+          userStore.user = data.value
           next()
         } else next({ name: 'join' })
       } catch (err) {

@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import router from '@/router';
 import AppModal from './AppModal.vue';
-import { useRoom } from '@/composables/Room'
+import { useRoom } from '@/composables/RoomManager'
 const { leaveRoom, destroyRoom } = useRoom()
 const props = defineProps<{ isAdmin: boolean }>()
 

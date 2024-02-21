@@ -4,9 +4,12 @@ import SharedView from './SharedView.vue';
 import { useForm } from 'vee-validate';
 import * as yup from 'yup'
 import { useUser } from '@/store/User';
+import { useRoom } from "@/composables/RoomManager"
 import socket from "@/listeners/socket"
 
 const userStore = useUser()
+const roomStore = useRoom()
+
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
         username: yup.string().required('Username is a required field').min(5),
@@ -17,7 +20,7 @@ const [username] = defineField('username');
 const [roomCode] = defineField('roomCode');
 
 const onSubmit = handleSubmit(async () => {
-    await userStore.joinRoom({ username: username.value, roomCode: roomCode.value })
+    await roomStore.joinRoom({ username: username.value, roomCode: roomCode.value })
     if (userStore.user) {
         await router.push({ path: 'chat' })
         socket.connect()

@@ -1,6 +1,6 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
 import socket from '@/listeners/socket'
-import { deleteMethod, destroyRoomUrl, leaveRoomUrl, postMethod } from '@/api/requests'
+import { deleteMethod, destroyRoomUrl, leaveRoomUrl, postMethod, joinRoomUrl } from '@/api/requests'
 import { useUser } from '@/store/User'
 import router from '@/router'
 import { useMessage } from '@/store/Message'
@@ -20,12 +20,22 @@ export function useRoom() {
       await leaveRoom()
     })
   }
+  const joinRoom = async ({ username, roomCode }: { username: string; roomCode: string }) => {
+    const { data } = await execute(joinRoomUrl, {
+      withCredentials: true,
+      method: postMethod,
+      data: { userName: username, roomCode }
+    })
+    if (data.value) {
+      userStore.user = data.value
+    }
+  }
 
   const leaveRoom = async () => {
     const { data } = await execute(leaveRoomUrl, { withCredentials: true, method: postMethod })
     if (data) {
       socket.disconnect()
-      userStore.setUser(undefined)
+      userStore.user = undefined
       messageStore.resetMessages()
       typingUsersStore.typingUsers = []
       connectedUsersStore.connectedUsers = []
@@ -37,7 +47,7 @@ export function useRoom() {
     if (data) {
       socket.emit('room:destroyed')
       socket.disconnect()
-      userStore.setUser(undefined)
+      userStore.user = undefined
       typingUsersStore.typingUsers = []
       connectedUsersStore.connectedUsers = []
       messageStore.resetMessages()
@@ -49,6 +59,7 @@ export function useRoom() {
     error,
     destroyRoom,
     leaveRoom,
+    joinRoom,
     bindRoomState
   }
 }

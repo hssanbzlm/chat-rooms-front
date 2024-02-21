@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConnectedUsers } from '@/store/ConnectedUsers';
-import { useRoom } from '@/composables/Room'
+import { useRoom } from '@/composables/RoomManager'
 import { useMessage } from '@/store/Message'
 import { useTypingUsers } from "@/store/TypingUsers"
 import socket from "@/listeners/socket"
