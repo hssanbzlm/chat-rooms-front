@@ -4,5 +4,5 @@ export interface User {
   fullName: string
   isAdmin: boolean
   avatar: string
-  roomName: string
+  belongsTo: string
 }

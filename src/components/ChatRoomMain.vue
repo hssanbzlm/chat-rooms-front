@@ -59,7 +59,7 @@ const displayedUsers = computed(() => {
                 </div>
             </div>
             <div class="chat w-100">
-                <ChatHeader :name="userStore.user?.roomName!" />
+                <ChatHeader :name="userStore.user?.belongsTo!" />
                 <div v-if="messageStore.isLoading" class="position-absolute start-50 mt-1">
                     <ChatSpinner />
                 </div>
