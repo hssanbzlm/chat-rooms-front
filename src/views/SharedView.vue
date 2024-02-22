@@ -12,9 +12,9 @@ const props = defineProps<propsShape>()
                 <div class="col-12 col-xxl-11">
                     <div class="card border-light-subtle shadow-sm">
                         <div class="row g-0">
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-6 img-container p-1">
                                 <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy"
-                                    :src="props.imgUrl">
+                                    src='https://res.cloudinary.com/dodm50cbx/image/upload/v1708598850/csbruxey86yl6bgqpjdl.png'>
                             </div>
                             <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
                                 <div class="col-12 col-lg-11 col-xl-10">
@@ -40,5 +40,15 @@ const props = defineProps<propsShape>()
 <style>
 section {
     min-height: 100vh;
+}
+
+.img-container {
+    max-height: 80vh;
+}
+
+@media (max-width: 768px) {
+    .img-container {
+        display: none;
+    }
 }
 </style>
