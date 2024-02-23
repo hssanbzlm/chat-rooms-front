@@ -12,6 +12,7 @@
 </template>
 <script setup lang="ts">
 import type { User } from '@/interfaces/user';
+import router from '@/router';
 import { useUser } from "@/store/User"
 import { storeToRefs } from 'pinia'
 const userStore = useUser()
@@ -19,7 +20,7 @@ const { user } = storeToRefs(userStore)
 const props = defineProps<{ connectedUsers: User[] }>()
 const toPrivate = (idUser: string) => {
     if (user.value?.userId !== idUser) {
-        window.open(`chat/private/${idUser}`, '_blank')
+        router.push({ path: `chat/private/${idUser}` })
     }
 }
 
