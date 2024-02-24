@@ -40,7 +40,9 @@ const isNotTyping = () => {
 }
 
 const typing = computed(() => {
-    return typingUsers.value.length > 0 ? typingUsers.value.join(',') + ' typing' : ''
+    const numberOfUsers = typingUsers.value.length
+    const verb = numberOfUsers > 1 ? 'are' : 'is'
+    return numberOfUsers > 0 ? typingUsers.value.join(',') + ` ${verb} typing` : ''
 })
 
 const loadMessages = () => {
@@ -73,7 +75,7 @@ const displayedUsers = computed(() => {
                 </div>
                 <ChatListMessage :messages="messages" :isLast="isLast" @load-next-messages="loadMessages" />
                 <div v-if="messages" class="mb-1 p-1">
-                    <small class="text-muted">{{ typing }}</small>
+                    <small class="text-muted d-inline-block">{{ typing }}</small>
                     <ChatInput size="xl" icon="paper-plane" placeholder="Enter text here..." @send-message="sendMessage"
                         @typing="isTyping" @not-typing="isNotTyping" />
                 </div>
