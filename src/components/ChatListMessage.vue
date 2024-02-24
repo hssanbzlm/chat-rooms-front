@@ -1,5 +1,5 @@
 <template>
-    <div v-if="props.messages" class="chat-history overflow-auto d-flex flex-column-reverse p-3" ref="el">
+    <div v-if="props.messages" class="chat-history overflow-auto d-flex flex-column-reverse" ref="el">
         <ul>
             <ChatMessage v-for="message in props.messages" :msg="message" :key="message._id" />
         </ul>

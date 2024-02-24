@@ -1,5 +1,5 @@
 <template>
-    <li :class="[{ 'd-flex flex-column align-items-end': !isMyMessage }, 'list-group-item', 'p-3']">
+    <li :class="[{ 'd-flex flex-column align-items-end': !isMyMessage }, 'list-group-item', 'p-3 pb-0']">
         <div class="message-data">
             <span :class="['msg-sender fw-bold', { 'me-1': !isMyMessage }]">{{ isMyMessage ? 'You' :
                 props.msg.sender.fullName

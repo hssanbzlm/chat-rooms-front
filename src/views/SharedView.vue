@@ -6,7 +6,7 @@ type propsShape = {
 const props = defineProps<propsShape>()
 </script>
 <template>
-    <section class="bg-light p-3 p-md-4 p-xl-5">
+    <section class="bg-light p-3 p-md-4 p-xl-5 d-flex align-items-center">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-xxl-11">

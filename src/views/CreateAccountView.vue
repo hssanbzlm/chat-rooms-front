@@ -10,8 +10,8 @@ const { data, isLoading, error, execute } = useAxios()
 
 const { errors, handleSubmit, defineField } = useForm({
     validationSchema: yup.object({
-        username: yup.string().required('Username is a required field').min(5),
-        fullName: yup.string().required('Fullname is a required field'),
+        username: yup.string().required('Username is required').min(5),
+        fullName: yup.string().required('Fullname is required'),
     }),
 });
 const [username] = defineField('username');
@@ -35,19 +35,21 @@ const redirect = (name: string) => {
             <form @submit="onSubmit">
                 <div class="row gy-3 overflow-hidden">
                     <div class="col-12">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating">
                             <input class="form-control" placeholder="Username" v-model="username" :disabled="isLoading" />
-                            <p v-if="errors.username" class="text-warning">{{ errors.username }}</p>
                             <label for="Username" class="form-label">Username</label>
                         </div>
                     </div>
+                    <p v-show="errors.username" class="text-warning warn-msg d-block mt-0 mb-0">{{ errors.username }}
+                    </p>
                     <div class="col-12">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating">
                             <input class="form-control" placeholder="Full name" v-model="fullName" :disabled="isLoading" />
-                            <p v-if="errors.fullName" class="text-warning">{{ errors.fullName }}</p>
                             <label for="Full-name" class="form-label">Full name</label>
                         </div>
                     </div>
+                    <p v-show="errors.fullName" class="text-warning warn-msg d-block mt-0 mb-0">{{ errors.fullName }}
+                    </p>
                     <div class="col-12">
                         <div class="d-grid">
                             <button class="btn btn-dark btn-lg" type="submit" :disabled="isLoading">Create</button>
@@ -55,14 +57,10 @@ const redirect = (name: string) => {
                     </div>
                 </div>
             </form>
-            <div v-if="isLoading">
-                LOADING
-            </div>
-            <div v-if="error">
-                <p class="text-danger">Error creating an account</p>
-            </div>
-            <div v-if="data">
-                <p class="text-primary"> {{ data }}</p>
+            <div class="d-inline-block result-state">
+                <p v-if="isLoading" class="text-danger"> Loading</p>
+                <p v-else-if="error" class="text-danger">Error creating an account</p>
+                <p v-else-if="data" class="text-primary"> {{ data }}</p>
             </div>
             <div class="row">
                 <div class="col-12">
