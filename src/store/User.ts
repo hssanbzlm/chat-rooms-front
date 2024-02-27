@@ -11,6 +11,7 @@ export const useUser = defineStore('user', () => {
   const updateUser = async (payload: FormData) => {
     const { data } = await execute(updateUserUrl, {
       withCredentials: true,
+      withXSRFToken: true,
       method: putMethod,
       data: payload
     })

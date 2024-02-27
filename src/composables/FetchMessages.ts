@@ -7,7 +7,8 @@ export function useFetchMessages() {
   const loadMessages = async (url: string) => {
     await execute(url, {
       method: getMethod,
-      withCredentials: true
+      withCredentials: true,
+      withXSRFToken: true
     })
   }
 

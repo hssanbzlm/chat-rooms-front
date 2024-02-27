@@ -10,7 +10,11 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       try {
-        const { data } = await execute(isAuthUrl, { method: getMethod, withCredentials: true })
+        const { data } = await execute(isAuthUrl, {
+          method: getMethod,
+          withCredentials: true,
+          withXSRFToken: true
+        })
         if (data.value) {
           userStore.user = data.value
           next()

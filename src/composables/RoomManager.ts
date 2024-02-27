@@ -23,6 +23,7 @@ export function useRoom() {
   const joinRoom = async ({ username, roomCode }: { username: string; roomCode: string }) => {
     const { data } = await execute(joinRoomUrl, {
       withCredentials: true,
+      withXSRFToken: true,
       method: postMethod,
       data: { userName: username, roomCode }
     })
@@ -43,7 +44,11 @@ export function useRoom() {
     }
   }
   const destroyRoom = async () => {
-    const { data } = await execute(destroyRoomUrl, { withCredentials: true, method: deleteMethod })
+    const { data } = await execute(destroyRoomUrl, {
+      withCredentials: true,
+      method: deleteMethod,
+      withXSRFToken: true
+    })
     if (data) {
       socket.emit('room:destroyed')
       socket.disconnect()
