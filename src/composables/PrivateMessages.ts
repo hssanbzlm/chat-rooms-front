@@ -1,15 +1,15 @@
 import type { message } from '@/interfaces/message'
 import { ref, watch, toValue } from 'vue'
-import { useFetchMessages } from '@/composables/FetchMessages'
 import socket from '@/listeners/socket'
-import { getPrivateMessagesUrl } from '@/api/requests'
+import { getPrivateMessagesUrl, getMethod } from '@/api/requests'
+import { useAxios } from '@vueuse/integrations/useAxios'
 
 export const usePrivateMessages = () => {
   const list = ref(0)
   const msgToSkip = ref(0)
   const isLast = ref(true)
   const isTyping = ref(false)
-  const { data, isLoading, error, loadMessages } = useFetchMessages()
+  const { data, isLoading, error, execute } = useAxios()
 
   const messages = ref<message[]>([])
 
@@ -52,7 +52,11 @@ export const usePrivateMessages = () => {
   const loadNextMessages = (userId: string) => {
     list.value += 1
     const url = `${getPrivateMessagesUrl}/${userId}/${toValue(list)}?skip=${toValue(msgToSkip)}`
-    loadMessages(url)
+    execute(url, {
+      method: getMethod,
+      withCredentials: true,
+      withXSRFToken: true
+    })
   }
   const resetMessages = () => {
     list.value = 0

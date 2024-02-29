@@ -1,15 +1,16 @@
 import type { message } from '@/interfaces/message'
 import { ref, watch, toValue } from 'vue'
-import { useFetchMessages } from '@/composables/FetchMessages'
 import socket from '@/listeners/socket'
 import { defineStore } from 'pinia'
 import { getMessagesUrl } from '@/api/requests'
+import { useAxios } from '@vueuse/integrations/useAxios'
+import { getMethod } from '@/api/requests'
 
 export const useMessage = defineStore('message', () => {
   const list = ref(0)
   const msgToSkip = ref(0)
   const isLast = ref(true)
-  const { data, isLoading, error, loadMessages } = useFetchMessages()
+  const { data, isLoading, error, execute } = useAxios()
 
   const messages = ref<message[]>([])
 
@@ -32,7 +33,11 @@ export const useMessage = defineStore('message', () => {
   const loadNextMessages = () => {
     list.value += 1
     const url = `${getMessagesUrl}/${toValue(list)}?skip=${toValue(msgToSkip)}`
-    loadMessages(url)
+    execute(url, {
+      method: getMethod,
+      withCredentials: true,
+      withXSRFToken: true
+    })
   }
   const resetMessages = () => {
     list.value = 0
