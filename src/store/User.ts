@@ -1,7 +1,8 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
 import { ref } from 'vue'
 import type { User } from '../interfaces/user'
-import { putMethod, updateUserUrl } from '@/api/requests'
+
+import { putMethod, updateUserUrl, getMethod, isAuthUrl } from '@/api/requests'
 import { defineStore } from 'pinia'
 
 export const useUser = defineStore('user', () => {
@@ -19,7 +20,18 @@ export const useUser = defineStore('user', () => {
       user.value = { ...user.value, fullName: data.value.fullName, avatar: data.value.avatar }
     }
   }
+  const isUserAuth = async () => {
+    const { data } = await execute(isAuthUrl, {
+      method: getMethod,
+      withCredentials: true,
+      withXSRFToken: true
+    })
+    if (data.value) {
+      user.value = data.value
+    }
+  }
   return {
+    isUserAuth,
     updateUser,
     isLoading,
     error,

@@ -1,8 +1,5 @@
 import { router } from './route'
-import { useAxios } from '@vueuse/integrations/useAxios'
-import { isAuthUrl, getMethod } from '@/api/requests'
 import { useUser } from '@/store/User'
-const { execute } = useAxios()
 router.beforeEach(async (to, from, next) => {
   const userStore = useUser()
   if (to.meta.requiresAuth) {
@@ -10,13 +7,8 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       try {
-        const { data } = await execute(isAuthUrl, {
-          method: getMethod,
-          withCredentials: true,
-          withXSRFToken: true
-        })
-        if (data.value) {
-          userStore.user = data.value
+        await userStore.isUserAuth()
+        if (userStore.user) {
           next()
         } else next({ name: 'join' })
       } catch (err) {
