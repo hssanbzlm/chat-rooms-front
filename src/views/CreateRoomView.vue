@@ -36,21 +36,21 @@ const redirect = (name: string) => {
                 <div class="row gy-3 overflow-hidden">
                     <div class="col-12">
                         <div class="form-floating">
-                            <input class="form-control" placeholder="Username" v-model="username">
+                            <input class="form-control" placeholder="Username" v-model="username" :disabled="isLoading">
                             <label for="Username" class="form-label">Username</label>
                         </div>
                     </div>
                     <p v-show="errors.username" class="text-warning warn-msg d-block mt-0 mb-0">{{ errors.username }}</p>
                     <div class="col-12">
                         <div class="form-floating">
-                            <input class="form-control" placeholder="Room name" v-model="roomName">
+                            <input class="form-control" placeholder="Room name" v-model="roomName" :disabled="isLoading">
                             <label for="Room-name" class="form-label">Room name</label>
                         </div>
                     </div>
                     <p v-show="errors.roomName" class="text-warning warn-msg d-block mt-0 mb-0">{{ errors.roomName }}</p>
                     <div class="col-12">
                         <div class="d-grid">
-                            <button class="btn btn-dark btn-lg" type="submit">Create</button>
+                            <button class="btn btn-dark btn-lg" type="submit" :disabled="isLoading">Create</button>
                         </div>
                     </div>
                 </div>
