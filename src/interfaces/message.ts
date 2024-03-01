@@ -1,8 +1,8 @@
-import type { User } from './user'
-export interface message {
+import type { IUser } from './User'
+export interface IMessage {
   _id: string
   content: string
   date: Date
-  sender: User
+  sender: IUser
   receiver: string
 }

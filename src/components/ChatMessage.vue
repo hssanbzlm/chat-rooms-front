@@ -15,13 +15,13 @@
     </li>
 </template>
 <script setup lang="ts">
-import type { message } from '@/interfaces/message';
+import type { IMessage } from '@/interfaces/Message';
 import { computed } from "vue"
 import { useUser } from '@/store/User'
 import { useDateFormat } from '@vueuse/core'
 
 const userStore = useUser()
-const props = defineProps<{ msg: message }>()
+const props = defineProps<{ msg: IMessage }>()
 
 const isMyMessage = computed(() => {
     return userStore.user?.userName === props.msg.sender.userName
@@ -66,4 +66,4 @@ const myAvatar = computed(() => {
 .message-content {
     font-size: 0.9em;
 }
-</style>
+</style>@/interfaces/Message

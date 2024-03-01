@@ -1,9 +1,9 @@
 import { ref } from 'vue'
-import type { User } from '@/interfaces/user'
+import type { IUser } from '@/interfaces/User'
 import socket from '@/listeners/socket'
 import { defineStore } from 'pinia'
 export const useConnectedUsers = defineStore('connectedUsers', () => {
-  const connectedUsers = ref<User[]>([])
+  const connectedUsers = ref<IUser[]>([])
 
   const bindConnectedUsersEvent = () => {
     socket.off('user:join')

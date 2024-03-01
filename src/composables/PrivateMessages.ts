@@ -1,4 +1,4 @@
-import type { message } from '@/interfaces/message'
+import type { IMessage } from '@/interfaces/Message'
 import { ref, watch, toValue } from 'vue'
 import socket from '@/listeners/socket'
 import { getPrivateMessagesUrl, getMethod } from '@/api/requests'
@@ -11,13 +11,13 @@ export const usePrivateMessages = () => {
   const isTyping = ref(false)
   const { data, isLoading, error, execute } = useAxios()
 
-  const messages = ref<message[]>([])
+  const messages = ref<IMessage[]>([])
 
   const bindPrivateMessagesEvents = () => {
     socket.off('user-private:message')
     socket.off('user-private:typing')
     socket.off('user-private:finish-typing')
-    socket.on('user-private:message', (message: message) => {
+    socket.on('user-private:message', (message: IMessage) => {
       messages.value.push(message)
       msgToSkip.value += 1
     })

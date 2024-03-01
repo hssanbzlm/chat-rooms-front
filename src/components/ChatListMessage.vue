@@ -9,8 +9,8 @@
 import { onMounted, ref } from "vue"
 import ChatMessage from "@/components/ChatMessage.vue"
 import { useInfiniteScroll } from '@vueuse/core'
-import type { message } from "@/interfaces/message";
-const props = defineProps<{ messages: message[], isLast: boolean }>()
+import type { IMessage } from "@/interfaces/Message";
+const props = defineProps<{ messages: IMessage[], isLast: boolean }>()
 const emits = defineEmits(['load-next-messages'])
 const el = ref<HTMLElement>()
 
@@ -23,4 +23,4 @@ useInfiniteScroll(el, () => {
     emits('load-next-messages')
 }, { distance: 50, direction: 'top', interval: 2000, canLoadMore: () => !props.isLast })
 
-</script>
+</script>@/interfaces/Message

@@ -1,4 +1,4 @@
-import type { message } from '@/interfaces/message'
+import type { IMessage } from '@/interfaces/Message'
 import { ref, watch, toValue } from 'vue'
 import socket from '@/listeners/socket'
 import { defineStore } from 'pinia'
@@ -12,7 +12,7 @@ export const useMessage = defineStore('message', () => {
   const isLast = ref(true)
   const { data, isLoading, error, execute } = useAxios()
 
-  const messages = ref<message[]>([])
+  const messages = ref<IMessage[]>([])
 
   const bindMessagesEvents = () => {
     socket.off('user:message')

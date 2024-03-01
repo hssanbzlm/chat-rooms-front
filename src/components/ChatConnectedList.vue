@@ -11,13 +11,13 @@
     </li>
 </template>
 <script setup lang="ts">
-import type { User } from '@/interfaces/user';
+import type { IUser } from '@/interfaces/User';
 import router from '@/router';
 import { useUser } from "@/store/User"
 import { storeToRefs } from 'pinia'
 const userStore = useUser()
 const { user } = storeToRefs(userStore)
-const props = defineProps<{ connectedUsers: User[] }>()
+const props = defineProps<{ connectedUsers: IUser[] }>()
 const toPrivate = (idUser: string) => {
     if (user.value?.userId !== idUser) {
         router.push({ path: `chat/private/${idUser}` })
@@ -42,4 +42,4 @@ const toPrivate = (idUser: string) => {
 .link {
     cursor: pointer;
 }
-</style>
+</style>@/interfaces/User

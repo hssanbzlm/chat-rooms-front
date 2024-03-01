@@ -1,13 +1,13 @@
 import { useAxios } from '@vueuse/integrations/useAxios'
 import { ref } from 'vue'
-import type { User } from '../interfaces/user'
+import type { IUser } from '../interfaces/User'
 
 import { putMethod, updateUserUrl, getMethod, isAuthUrl } from '@/api/requests'
 import { defineStore } from 'pinia'
 
 export const useUser = defineStore('user', () => {
   const { isLoading, error, execute } = useAxios()
-  const user = ref<User>()
+  const user = ref<IUser>()
 
   const updateUser = async (payload: FormData) => {
     const { data } = await execute(updateUserUrl, {
