@@ -15,3 +15,12 @@
 - Get typing status
 - Update profile (avatar and full name)
 - Destroy a room 
+## *Some screenshots*
+
+![chat rooms](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/55hap0s8y4k8ncjfpydf.gif)
+<hr>
+
+![Load messages](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/dbu9nv1vzo8w9psat9f5.gif)
+<hr>
+
+![Private room](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xw660j968q1joix4g8m7.gif)
